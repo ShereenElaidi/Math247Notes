@@ -1,0 +1,628 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\newcommand{\forceindent}{\leavevmode{\parindent=3em\indent}}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[margin=2cm]{geometry}
+\newtheorem{theorem}{Theorem}
+\usepackage{layout}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{color,soul}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{color}
+
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array, booktabs}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{color}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{mathrsfs}
+\newsavebox\foobox
+\newlength{\foodim}
+\newcommand{\slantbox}[2][0]{\mbox{%
+        \sbox{\foobox}{#2}%
+        \foodim=#1\wd\foobox
+        \hskip \wd\foobox
+        \hskip -0.5\foodim
+        \pdfsave
+        \pdfsetmatrix{1 0 #1 1}%
+        \llap{\usebox{\foobox}}%
+        \pdfrestore
+        \hskip 0.5\foodim
+}}
+
+\def\Laplace{\slantbox[-.45]{$\mathscr{L}$}}
+\setlength{\arrayrulewidth}{0.2mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.0}
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}[section]
+
+%TO USE CODE
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$ $},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+
+
+
+\title{\textbf{Math 247: Applied Linear Algebra } \vspace{-2ex}}
+\author{\textbf{Week 4 Course Notes} \vspace{-2ex}}
+\date{}
+
+
+\newenvironment{enumerate_tight}{
+	\begin{enumerate}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{enumerate}}
+\newenvironment{itemize_tight}{
+	\begin{itemize}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{itemize}}
+
+\begin{document}
+
+\maketitle
+%\tableofcontents 
+
+\pagestyle{fancy}
+\lhead{Math 247: Applied Linear Algebra}
+\rhead{}
+\rhead{Revision Notes}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+{\renewcommand{\arraystretch}{1.2}% for the vertical padding
+
+%Document goes in here 
+\textbf{Main topics}: direct sums, linear maps, kernel, image, injective, the fundamental theorem/dimension formula. 
+\section{Direct Sums}
+\begin{defn}
+	Say we have a vector space V over k and $U \leq V, W \leq V$. We then define the following: 
+	\begin{align*}
+		U + W := \{ U + W\ |\ u \in U, w \in W \}
+	\end{align*}
+	We have already proven that a regular sum is a subspace. However, a sum of subspaces is called \textbf{direct}, in symbols, $U \oplus W$, if the following holds: $\forall v \in U + W$, the representation $v = u + w$ where $u \in W, w \in W$ is \textbf{uniquely determined}. 
+\end{defn}
+This concept can be extended to multiple sums: a sum $U_1 + ... + U_n$ is called direct if $\forall v \in U_1 + ... + U_n$, the representation $$ v = u_1 + ... + u_n, u_j \in U_j\ \forall i \leq j \leq n$$ is unique. 
+
+
+\begin{theorem}
+	A sum U + W of subspaces is direct iff $U \cap W = \{0 \}$. 
+\end{theorem}
+\begin{proof}
+	Will prove both directions.
+	\newline
+	[ $\Rightarrow$ ] Assume: the sum U + W is direct. So, we will pick an arbitrary vector intersection and prove that it must be zero. \newline 
+	\newline 
+	Let $u \in U \cap W$. Then, to prove uniqueness, we will express the zero vector in more than one way: 
+	$$0 = 0 + 0 = v + (-v)$$
+	We have that the zero on the LHS is in the sum U+W. This can be broken down into 0 + 0, which the first zero contained in U and the second zero contained in W. Because they are subspaces, we know that they are closed under multiplication; hence, we can also say that this is equal to $v + (-v)$. $v$ is in the intersection, and especially in U. $-v$ is especially in W since it's closed under scalar multiplication. 
+	\newline
+	\newline
+	So, we now have two representations of zero. However, we assumed that each representation is unique. This forces $v$ to be zero and we are done. 
+	\newline
+	\newline
+	[ $\Leftarrow$ ] Let $U \cap W = \{0 \} $. Consider an arbitrary vector in the sum. We need to show that this representation is unique. 
+	\newline
+	\newline 
+	Let $v \in U + W$ be arbitrary. Then, by the definition of the sum, we obtain: 
+	\begin{align*}
+		v = u_1 + w_1 \mbox{    and    } v = u_2 + w_2 
+	\end{align*}
+	We need to show that $u_1 = u_2$ and $w_1 = w_2$. The trick is to subtract the equations to obtain zero: 
+	\begin{align*}
+		0 & = (u_1 - u_2) + (w_1 - w_2)  \\
+		& \Rightarrow u_1 - u_2 = w_2 - w_1 
+	\end{align*}
+	The LHS is contained inside $U$ and the RHS is contained inside $W$. Due to equality, both sides are contained in the intersection. But, we can assume that the intersection is trivial. Hence: 
+	\begin{align*}
+		u_1 - u_2 = 0 = w_2 - w_1 \Rightarrow u_1 = u_2 \mbox{ and } w_1 = w_2 
+	\end{align*}
+	\end{proof}
+\section{Linear Maps}
+\textbf{Motivation}: in algebra, once we define a set of objects, the next task is to describe mappings between these objects. Here, we consider \textbf{linear maps}. Generally speaking, maps between objects preserve their algebraic structures. 
+\begin{defn}
+	Let V and W be VS over k (must be over the SAME k). A function $L : V \rightarrow W$ is called \textbf{linear} if it behaves will with respect to the following operations: 
+	\begin{enumerate_tight}
+		\item \textbf{Respecting addition}: $L (v_1 + v_2) = L(v_1) + L(v_2)$ 
+		\item \textbf{Respecting scalar multiplication}: $L(kv_1) = k(L(v_1))$
+	\end{enumerate_tight}
+\end{defn}
+
+\begin{theorem}
+	This theorem is useful when proving things are not linear maps. Let $L : V \rightarrow W$ be linear. Then, the zero vector is always preserved: 
+	\begin{align*}
+		L(0) = 0 
+	\end{align*}
+\end{theorem}
+This theorem is so big that we demonstrate two proofs (each follow from one of the properties from the definition). 
+\begin{proof}
+	Exploit \textbf{property 1}: 
+	\begin{align*}
+		L(0) &  = L(0 + 0) = L(0) + L(0) \\
+		& = 0 + L(0) = L(0) + L(0) \\
+		& \Rightarrow 0 = L(0) \mbox{ (cancellation law) } 
+	\end{align*}
+\end{proof}
+\begin{proof}
+	 Exploit \textbf{property 2}: 
+	 \begin{align*}
+	 	L(0) = L(0 \cdot 0) = 0 \cdot L(0) = 0 
+	 \end{align*}
+\end{proof}
+\textcolor{red}{\textbf{CAUTION} \newline 
+			in calculus, the so-called ``linear maps'' $f: x \mapsto ax + b$ is only linear if $b=0$}. This is similar to the fact that lines in general are not subspaces. 
+\begin{defn}
+	Each linear map is associated to two very important subspaces. If we let $L: V \rightarrow W$ be linear. Then, we can define: 
+	\begin{enumerate_tight}
+		\item the \textbf{kernel}, symbolized as Ker(L), is defined as 
+		\begin{align}
+			Ker(L) := \{ v \in V\ |\ L(v) = 0 \} \subseteq V
+		\end{align}
+		in other words: it's the set of all vectors that are sent to zero by the linear transformation. 
+		\item the \textbf{image}, symbolized as Im(L), is defined as: 
+		\begin{align} 
+			Im(L) := \{ L(v)\ |\ v \in V \} \subseteq W
+		\end{align} 
+	\end{enumerate_tight}
+\end{defn}
+
+\begin{theorem}
+	Let $L : V \rightarrow W$ be linear. Then: 
+	\begin{enumerate_tight}
+		\item The $Ker(L) \subseteq V$ is a subspace of V. 
+		\item The $Im(L) \subseteq W$ is a subspace of W. 
+	\end{enumerate_tight}
+	
+	\begin{proof}
+		This is a pretty standard proof by now. We just check the standard subspace criterion. 
+		\newline
+		\textbf{Kernel:}
+		\begin{enumerate_tight}
+			\item We know that zero is contained in the kernel because we have just proven that $L(0)= 0$. 
+			\item \textbf{Closure under addition:} Let $v_1, v_2 \in Ker(L)$. Then: 
+			\begin{align*}
+				L(v_1 + v_2) & = L(v_1) + L(v_2) \\
+				& = 0 + 0 = 0 \\
+				& \Rightarrow v_1 + v_2 \in Ker(L) 
+			\end{align*}
+			\item \textbf{Closure under scalar multiplication:}
+			\begin{align*}
+				L(kv_1) &  = kL(v_1) \mbox{ (Linearity) } \\
+						& = K \cdot 0 \\
+						& = 0 \\
+				 & \Rightarrow kv_1 \in Ker(L) \\
+			\end{align*}
+		\end{enumerate_tight}
+	\textbf{Image}: 
+	\begin{enumerate_tight}
+		\item We know 0 is in the image under L, since $L(0) = 0$. 
+		\item \textbf{Closure under addition:} Let $w_1, w_2 \in im(L)$. Then: 
+		\begin{align*}
+			\exists v_1, v_2 \in V \mbox{ with } L(v_1) = w_1 \mbox{ and } L(v_2) = w_2 
+		\end{align*}
+		We need to show that $w_1 + w_2$ is contained in the image: 
+		\begin{align*}
+			L(v_1 + v_2) = L(v_1) + L(v_2) = w_1 + w_2 \in Im(L) 
+		\end{align*}
+	\item \textbf{Closure under scalar multiplication:}
+	\begin{align*}
+		L(kv_1) = kL(v_1) = kw_1 \in Im(L) 
+	\end{align*}
+	\end{enumerate_tight} 
+ 
+	\end{proof}
+\end{theorem}
+
+\begin{exmp}
+\begin{align*}
+	L &: K^n \rightarrow K^m \\
+	  & x \mapsto Ax 
+\end{align*}
+is a linear transformation. In this case, $x$ is an $n \times 1$ matrix. A is a $m \times n$ matrix; hence, the RHS becomes $m \times 1$. Checking the conditions:
+\newline 
+\newline 
+\textbf{Well-behaved with respect to addition:} 
+\begin{align*}
+	A(x + \tilde{x}) = Ax + A \tilde{x}  = L(x + \tilde{x}) = L(x) + L( \tilde{x} ) 
+\end{align*}
+\textbf{Well-behaved with respect to SM:}
+\begin{align*}
+	A(kx) = k(Ax)  \\
+	L(kx) = kL(x) \\ 
+\end{align*}
+In this case, $Ker(L) = nullspace(A)$ and $Im(L) = colspace(A)$. 
+
+\end{exmp}
+\begin{exmp}
+	\textbf{Derivative map}: CLAIM - this is a linear map. 
+	\begin{align*}
+		D: P(\mathbb{R}) \rightarrow P(\mathbb{R}) \\
+		p \mapsto p' 
+	\end{align*}
+	Checking the behaviour: 
+	\begin{align*}
+		D(p+q) & = (p+q)' = kp' = D(p) + D(q) \\ 
+		D(kp) & = (kp)' = kp' = kD(p) \\ 
+	\end{align*}
+	\textbf{Key subspaces:}
+	\begin{align*}
+		 & Ker(D) = P_0 (\mathbb{R}) \mbox{ (The set of all constant polynomials) }  \\
+		& Im(D) = P(\mathbb{R}) \mbox{ (everything) }  
+	\end{align*}
+\end{exmp}
+
+\begin{exmp}
+	We can be even more precise with our subspaces. 
+	\begin{align*}
+		D: & p_n (\mathbb{R}) \rightarrow p_{n-1} (\mathbb{R}) \\
+	 & p \mapsto p' \\ 
+	\end{align*}
+	We proved above that D is linear. The kernel remains the same, but, now the image changes. It becomes: $Im(L) = P_{n-1} (\mathbb{R})$. This makes the function now \textbf{surjective}, since every element in the co-domain is mapped to.
+\end{exmp}
+\begin{exmp}
+	We can define $D: P_n (\mathbb{R}) \rightarrow P_n(\mathbb{R})$. This is also linear. Compared to the previous example, there is more freedom, especially when it comes to the target. The image then becomes: $Im(L) = P_{n-1} (\mathbb{R})$. Here, the image becomes the entire space itself; hence, L is no longer surjective. 
+\end{exmp}
+
+\begin{defn}
+	Let I be an interval $I \subseteq R$. Define $C^o(I):=$ set of all continuous functions at I. Then, we obtain:
+	\begin{align*}
+		C^1 (I) & := \mbox{ the set of all continuously differentiable functions } \\ 
+		& \vdots  \\
+		C^n (I) & := \mbox{ the set of all n-times continuously differentiable functions } \\ 
+		C^\infty (I) &  := \mbox{ the set of all functions on I with derivatives of all orders. } \\
+	\end{align*}
+	These are all vector spaces over $\mathbb{R}$. Additionally, we obtain the following subspace chain: 
+	\begin{align*}
+		C^{\infty} (I) \leq ... \leq C^n(I) \leq ... \leq C^2 (I) \leq C (I) \leq C^0 (I) 
+	\end{align*}
+\end{defn}
+
+In light of this definition, we can re-interpret D in another way: 
+\begin{align*}
+	& D: C^n (I) \rightarrow C^{n-1} (I)  \mbox { or } \\
+	& D: C^\infty (I) \rightarrow C^\infty (I) 
+\end{align*}
+Maths fun fact: this is very important in analysis. 
+
+\begin{exmp}
+	\textbf{Integration:} there are two types of integration maps. The general structure: 
+	\begin{align*}
+		V = P (\mathbb{R}); \indent a,b \in \mathbb{R} 
+	\end{align*}
+	\textbf{Type I: Definite Integral} \\
+	\begin{align*}
+		L: & P(\mathbb{R}) \rightarrow \mathbb{R} \\
+			& p \mapsto \int_a^b p dx 
+	\end{align*}
+	This takes a \textbf{function or polynomial} and produces a \textbf{real number}. The proof is easy (just use the properties from Calc II). 
+	\newline 
+	\newline 
+	\textbf{Type II: Indefinite integral} the input here is a polynomial $x^n$ and the output is a polynomial $x^{n+1}$. It's a map between two function spaces. Symbolically: 
+	\begin{align*}
+		L: & P(\mathbb{R}) \rightarrow P(\mathbb{R}) \\ 
+		   & p \mapsto \int_a^x p(t) dt 
+	\end{align*}
+	The proof that this is linear is really easy. 
+	\newline
+	\newline
+	\textbf{Type III}: indefinite with degree restriction: 
+	\begin{align*}
+		L: & P_n(\mathbb{R}) \rightarrow P_{n+1} (\mathbb{R}) \\ 
+		   & p \mapsto \int_a^x p(t)dt 
+	\end{align*}
+	The kernel is the trivial kernel ($\{ 0 \}$). The image is NOT $P(\mathbb{R})$; instead, it is the set of all polynomials except for those with a root at $x=a$. 
+\end{exmp}
+
+\begin{exmp}
+	Consider the VS of all sequences (V=S), $s=(s_1,s_2,s_3,...): S = \{ (x_1,x_2,x_3,...)\ |\ x_i \in \mathbb{R} \forall i \}$. There are two useful maps that we can define: 
+	\begin{itemize}
+		\item \textbf{Left-shift}: occur when we shift all sequences to the left. 
+		\begin{align*}
+			(x_1, x_2, x_3, ...) \mapsto (x_2, x_3, x_4,...) 
+		\end{align*}
+		\item \textbf{Right-shift}: occur when we shift all sequences to the right. 
+		\begin{align*}
+			(x_1, x_2, x_3,...) \mapsto (0, x_1, x_2, x_3,...) 
+		\end{align*}
+		We need to keep the 0 in the first position to maintain linearity. This is useful for eigenvalues. 
+	\end{itemize} 
+\end{exmp}
+
+\begin{theorem}
+	Let V, W, be VS over K. Define: $L: V \rightarrow W$ (linear). Then, L is said to be \textbf{injective} $\iff$ $Ker(L) = \{ 0 \}$. This allows us to quickly check if a linear map is injective. In short: \textbf{a linear map is injective if it is injective at 0 no non-trivial component of the intersection}. 
+\end{theorem}
+Recall that an \textbf{injective function} is one-to-one. $f(x) = f(y) \Rightarrow x = y$. 
+
+\begin{proof}
+	Two directions.
+	\newline
+	[ $\Rightarrow$ ] Let L be injective. We need to prove that the kernel is trivial. Let $v \in Ker(L)$. Then, $L(v) = 0 =L(0)$. This means that we have two elements in $v$ with the same image. However, by \textbf{injectivity}, they must be the same. Hence, $v=0 \Rightarrow Ker(L) = \{ 0 \}$.  
+	\newline 
+	\newline 
+	[ $\Leftarrow$ ] This is what really sets linear maps apart from other maps. Assume that Ker(L) = $\{ 0 \}$. Let $v, \tilde{v} \in V s.t. L(v) = L(\tilde{v})$. We need to prove that the two v's are identical. 
+	\begin{align*}
+		L(v) = L(\tilde{v}) \Rightarrow L(v) - L(\tilde{v}) = 0 \Rightarrow L(v- \tilde{v}) = 0 \Rightarrow v - \tilde{v} \in ker(L) 
+	\end{align*}
+	By assumption, however, we know that the kernel is trivial. Hence: 
+	\begin{align*}
+		v-\tilde{v} = 0 \Rightarrow v = \tilde{v} 
+	\end{align*}
+	Hence, L is injective and we are done. 
+\end{proof}
+\begin{theorem}
+	This theorem will tell us how we can go about constructing linear maps. Let V be a finite-dimensional VS over k, W and vs over K. Let $\{v_1,...,v_n \} $ be a basis for V. 
+	\newline
+	\newline
+	Let $\{ w_1,...,w_n \}$ be arbitrary vectors in W. Then, there exists a \textbf{uniquely determined} linear map $L : V \rightarrow W$ such that: 
+	\begin{align*}
+		L(v_1) = w_1, ..., L(v_n) = w_n
+	\end{align*}
+	The crux: the linear map is uniquely determined by the basis. 
+\end{theorem}
+
+\begin{proof}
+	This is a big proof that will contain proofs inside it. The overall aim of the proof: to prove \textbf{existence and uniqueness}. 
+	\newline
+	\newline
+	First, we will \textbf{define L}: $v_1, ..., v_n$ is a basis. So, we can pick a vector $v \in V$. The fact that it's a basis implies that $\exists k_1,...,k_n \in K$ s.t.: 
+	\begin{align*}
+		v = k_1v_1 + ... + k_n v_n 
+	\end{align*}
+	We define $L(v)$ to be: 
+	\begin{align*}
+		L(v) := k_1w_1 + ... + k_n w_n 
+	\end{align*} 
+	\textbf{Remark}: this only makes sense since the coefficients $k_1 to k_n$ are UNIQUELY determined; else, we would not have a function.
+	\newline
+	\newline
+	\textbf{Linearity of L}: To prove that L is linear, then we need to go through the properties: Let $v, \tilde{v} \in V$. We express this in terms of a basis: 
+	\begin{align*}
+		& v = k_1 v_1 + ... + k_n v_n \\
+		& \tilde{v} = l_1v_1 + ... + l_nv_n \\
+	\end{align*} 
+	The proof that these are well-behaved with respect to scalar multiplication and addition are straightforward. So, we have proven linear. Now, we need to prove uniqueness. 
+	\newline
+	\newline 
+	\textbf{Proving uniqueness}: 
+	\newline 
+	Pick an arbitrary linear map. 
+	\newline 
+		Let $\tilde{L}$ : V $\rightarrow$ W be linear with the property that $\tilde{L}(v_1)  = w_1$ and $\tilde{L}(v_n) = w_n$. 
+	\newline
+	To prove uniqueness, we need to show that $L = \tilde{L}$. 
+	\begin{align*}
+		& \Rightarrow \tilde{L}(k_1v_1) = k_1w_1,...., \tilde{L}(k_nv_n) = k_nw_n  
+		& \Rightarrow \tilde{L}(k_1v_1 + ... + k_nv_n) = \tilde{L}(k_1v_1) + ... + \tilde{L}(k_nv_n) \\ 
+		& \Rightarrow k_1w_1 + ... + k_nw_n
+	\end{align*}
+	Recall the definition of L. They are identical. This means that they are identical: $\tilde{L}(v) = L(v) \forall v \in V$. 
+	\newline
+	\newline
+	$\therefore \tilde{L} = L \Rightarrow$ L is uniquely determined. 
+	
+\end{proof}
+
+The most important theorem of the section: 
+\begin{theorem}[The Dimension Formula/The Fundamental Theorem]
+
+Let V be a finite-dimensional VS over k, W VS over K, and $L: V \rightarrow W$ be linear. Last class, we learned that with any linear map, we obtain the kernel and image. This formula relates the sizes of those subspaces to the size of V. 
+\begin{align}
+	dim(K) + dim(Im) = dim(V)
+\end{align}
+	
+\end{theorem}
+This theorem implies that a big kernel means that we have a highly non-injective mapping. A large image means that the mapping is close to injective. This formula describes the balance between the objects; the ``proof is one of the pretty proofs.'' 
+
+\begin{proof}
+	We will determine the bases by looking at dimension. Define the following: 
+	\begin{align*}
+		& Let \{ u_1, ..., u_k  \} \mbox{ be a basis for Ker(L)} \\
+		& Let \{ w_1, ..., w_n \} \mbox{ be a basis for Im(L) } \\ 
+	\end{align*}
+	We need to construct a basis for V. This is the tough part; the w's live in the wrong space. So, we somehow need to transport the w's back into v. However, we do know that the image is the set of all elements in W with a pre-image in V. 
+	\newline
+	\newline
+	Since $w_1,...,w_n$ are in $Im(L)$, we know that $\exists v_1, ..., v_n \in V$ with $L(v_1) = w, ...., L(v_n) = w_n$. However, the choices of $v_1, ..., v_n$ are generally NOT uniquely determined (there could be an infinite number vectors...). If this is the case, then we can pick an arbitrary vector $v$; the choice is completely irrelevant. 
+	% \includegraphics{PICTURE} 
+	
+	We need to prove that all the $u's$ with the $v's$ are linearly independent. We also need to prove that they form a basis for V (more important). 
+	\newline 
+	\newline
+	Let $B : = \{ u_1, ..., u_k, v_1, ..., v_n \}$. Claim: B is a basis for V. To prove something is a basis for a VS, we need to prove linear independence and spanning. 
+	\begin{proof}
+		\textbf{B is linearly independent}: consider the arbitrary combination of the vectors that produce zero: 
+		\begin{align}
+			a_1 u_1 + ... + a_k u_k + b_1 v_1 + ... + b_n v_n = 0 
+		\end{align}
+		We need to prove that all the coefficients in this equation are zero. The trick is to apply the linear map to both sides of the equation and use linearity: 
+		\begin{align*}
+			& L (a_1 u_1 + ... + a_k u_k + b_1 v_1 + ... + b_n v_n) = L(0) = 0  \\
+			& aL(u_1) + ... + a_k L(u_k) + b_1 L(v_1) + .... + b_nL(v_n) = 0 
+		\end{align*}
+		We know that the u's form a basis for the kernel; hence, the transformation will produce zero. We know that the v's form a basis for the pre-image; hence, the transformation will map them to the image vectors: the w's. So, we then obtain: 
+		\begin{align*}
+			b_1 w_1 + ... + b_n w_n = 0 
+		\end{align*}
+		The w's form a basis for the image. So, they are especially linearly independent. So, we have that al the b's must be zero. If we plug this into the main equation (4), we obtain: 
+		\begin{align*}
+			a_1 u_1 + ... + a_k u_k + 0 + ... + 0 = 0 
+		\end{align*}
+		We know that the vectors $u_1, ..., u_k$ form a basis for the kernel. So, they are especially linearly independent. Hence, all their coefficients must be zero. So, we have proven that all scalars involved are zero, which forces B to be linearly independent. 
+		\newline 
+		\newline
+		\textbf{B is spanning}: to do this, we take an arbitrary vector in V and prove that we can write it as a linear combination of those vectors. This is a difficult proof, but as always, there is a trick: \textbf{map a vector under L}. Such a vector would live in $im(L)$, which we already have a basis for. 
+		\newline 
+		\newline 
+		Ket $v \in V$ be arbitrary. Let $w := L(v)$. Then, $w \in Im(L)$. Thus, we can express that vector as a linear combination of the basis vectors of the image: $\exists b_1, ..., b_n \in K$ s.t.: 
+		\begin{align*}
+			w = b_1 w_1 + ... + b_n w_n 
+		\end{align*}
+		Let $\tilde{v}$ denote an arbitrary vector in the image. We can replace the w's in the previous equation with v's: 
+		\begin{align*}
+			\tilde{v} = b_1 v_1 + ... + b_n v_n 
+		\end{align*}
+		To figure out the relationship between these two vectors, we can consider the difference between $v$ and $\tilde{v}$ and map that under L: 
+		\begin{align*}
+			L(v - \tilde{v}) = L(v) - L(\tilde{v}) 
+		\end{align*}
+		Consider $L(v)$. That's precisely going to be in the image. We know from the previous formulas that $L(\tilde{v})$ is going to be equal to $b_1 w_1 + ... + b_n w_n = w$. We obtain the same image: 
+		\begin{align*}
+			w - w = 0 \Rightarrow v - \tilde{v} \in Ker(L) 
+		\end{align*}
+		We have a basis for the kernel: so we can represent $v-\tilde{v}$ as a linear combination of u's: 
+		\begin{align*}
+			v - \tilde{v} = a_1 u_1 + ... + a_k u_k \\
+		\end{align*}
+		Moving $\tilde{v}$ to the LHS and adding the representation of $\tilde{v}$ to both sides of the equation, we then obtain: 
+		\begin{align*}
+			v = a_1 u_1 + ... + a_k u_k + b_1 v_1 + ... + b_n v_n 
+		\end{align*}
+		We have just expressed an arbitrary vector $v$ as a linear combination of the u's and v's; hence, B is spanning. Since we have proven both parts, we know that it is a basis. 
+	\end{proof}
+	Back to the main proof... since B is a basis for V, we have the following: 
+	\begin{align*}
+		dim(B) = |B | = k + n 
+	\end{align*}
+	\begin{itemize}
+		\item k is the number of vectors in the basis of the kernel ( k = dim(ker(L)). 
+		\item n is the number of elements in the basis of the image (n = dim(Im(L)). 
+		\item So we obtain: \textbf{dim(B) = dim(Ker(L)) + dim(Im(L))}
+	\end{itemize}
+\end{proof}
+
+\begin{exmp}
+	$D: P_n(k) \rightarrow P_n(k)$ (differentiation map). 
+	\begin{enumerate_tight}
+		\item The dimension of $P_n(k)$ is n+1. 
+		\item Ker(D) is all constant polynomials, $P_0(k)$. This dimension is one. 
+		\item Im(D) is all polynomials of degree at most $n-1$. Hence, this dimension is n. 
+		\item Adding the components together, we obtain: 
+		\begin{align*}
+			dim(V) = & dim(ker(D)) + dim(im(L)) \\ 
+			n + 1 &  = 1 + n 
+		\end{align*}
+	\end{enumerate_tight}
+\end{exmp}
+This is really useful because we can use this formula to determine the dimension of the image, kernel, whole space if we only know some parts of the puzzle. This is useful for proving spanning, basis, and linear independence. 
+\begin{exmp}
+	Let A be a matrix, $A \in mat(n \times m, \mathbb{R}). $Consider the linear system $Ax = 0$. Here, the set of solutions is the null-space. Recall from Math 133: 
+	\begin{itemize_tight}
+		\item dim(nullspace(A)) + dim(columnspace(A)) = m 
+		\item dim(colspace(A)) = dim(rowspace(A)) = rank(A). 
+		\item In Assignment 2, we: 
+		\begin{align*}
+			Lx \mapsto Ax, L: k^m \mapsto k^n
+		\end{align*}
+		\begin{itemize_tight}
+			\item nullspace(A) = Ker(L) 
+			\item colspace(A) = Im(L)
+			\item Since the dimension of kernel + dimension of image + dim V, we obtain: 
+			\begin{itemize_tight}
+				\item dim(nullspace) + rank(A) = m 
+			\end{itemize_tight}  
+		\end{itemize_tight} 
+	\end{itemize_tight}
+\end{exmp}
+
+\begin{exmp}
+	Consider $tr: mat(n \times n, k)$. Recall that the trace is the sum of all the elements on the main diagonal. 
+	\begin{align*}
+		\begin{bmatrix}
+			a_{11} &  \hdots & a_{1n} \\ 
+			\vdots & \ddots  & \vdots \\
+			a_{1n} & \hdots & a_{nn} \\
+		\end{bmatrix} \mapsto \sum a_{11} + ... + a_{nn} 
+	\end{align*}
+	We can show that the trace is linear just by using the properties of matrix arithmetic we learned in Math 133. What's more interesting are the associated subspaces: 
+	\begin{enumerate}
+		\item Ker(L): the set of all matrices whose trace is zero. There is one constraint here: one degree of freedom. We will prove exactly what this will be using the dimension formula. 
+		\item Im(L): is the set of all traces, which is the set of all scalars in k. This is essentially $\mathbb{R^1}$; so, the dimension of the image is 1. 
+		\item Dim(V) = set of all n-by-n coefficients in k would be $n^2$. 
+		\item Hence:
+		\begin{align*}
+			dim(Ker(L)) = n^2 -1
+		\end{align*}
+	\end{enumerate}
+\end{exmp}
+\begin{exmp}
+	Also related to Math 133: let $A \in mat(n \times m, \mathbb{R})$. This means $n$ rows and $m$ columns. We can assume $n < m$ (rows < cols). Then, the homogeneous linear system $Ax =0$ has non-trivial solutions. 
+	\begin{itemize_tight}
+		\item The number of columns is equal to the number of variables. 
+		\item We have more variables than constraints, so we will obtain non-trivial solutions. Proving with row-reduction is not elegant. So, we will apply the dimension formula. 
+	\end{itemize_tight}
+	\begin{align*}
+		L: x \mapsto Ax \Rightarrow Ax = 0 \mbox{ the system has non-trivial solutions. Our spaces}: K^m \mapsto K^n
+	\end{align*}
+	The linear map has a non-trivial kernel. This implies that L has a non-trivial solution. This occurs when the dimension of the kernel is strictly greater than zero. We will prove with the dimension formula: 
+	\begin{align*}
+		& dim(Ker(L)) + dim(Im(L)) = dim(V) (dim(V) = dim(K^m) \\
+		& dim(Ker(L)) = dim(K) - dim(Im(L)) \\
+		& dim(Ker(L)) = m - colspace(L) \\ 
+		& dim(Ker(L)) = m - dim(rowspace) \\
+		& dim(Ker(L)) = m - rank \\
+		& dim(Ker(L)) = m -n > 0 \therefore ker(L) \mbox{ is non-trivial }
+	\end{align*}
+	The kernel is non-trivial implies that the system has non-trivial solutions. 
+\end{exmp}
+
+
+\end{document} 

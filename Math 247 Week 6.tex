@@ -1,0 +1,585 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\newcommand{\forceindent}{\leavevmode{\parindent=3em\indent}}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[margin=2cm]{geometry}
+\newtheorem{theorem}{Theorem}
+\usepackage{layout}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{color,soul}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{color}
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array, booktabs}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{color}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{mathrsfs}
+\newsavebox\foobox
+\newlength{\foodim}
+\newcommand{\slantbox}[2][0]{\mbox{%
+        \sbox{\foobox}{#2}%
+        \foodim=#1\wd\foobox
+        \hskip \wd\foobox
+        \hskip -0.5\foodim
+        \pdfsave
+        \pdfsetmatrix{1 0 #1 1}%
+        \llap{\usebox{\foobox}}%
+        \pdfrestore
+        \hskip 0.5\foodim
+}}
+\def\Laplace{\slantbox[-.45]{$\mathscr{L}$}}
+\setlength{\arrayrulewidth}{0.2mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.0}
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}[section]
+
+%TO USE CODE
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$ $},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+
+
+
+\title{\textbf{Math 247: Applied Linear Algebra} \vspace{-2ex}}
+\author{\textbf{Course Notes - Week 6} \vspace{-2ex}}
+\date{}
+
+
+\newenvironment{enumerate_tight}{
+	\begin{enumerate}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{enumerate}}
+\newenvironment{itemize_tight}{
+	\begin{itemize}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{itemize}}
+
+\begin{document}
+
+\maketitle
+%\tableofcontents 
+\textbf{Main topics}: Compositions of linear maps, matrix representations of isomorphisms, change of basis, similarity, normal form problem, equivalence relation. 
+
+\pagestyle{fancy}
+\lhead{Math 247: Applied Linear Algebra}
+\rhead{}
+\rhead{Revision Notes}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+{\renewcommand{\arraystretch}{1.2}% for the vertical padding
+
+\section{From Last Time} 
+Recall the example from last class:
+\begin{align*}
+	L: &  Mat(2 \times 2, \mathbb{R}) \rightarrow Mat(2 \times 2, \mathbb{R}) \\
+	& A \mapsto A - A^T \\
+	& B = \begin{bmatrix}
+		1 & 0 \\
+		0 & 0 
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 1 \\
+		0 & 0 
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 0 \\
+		0 & 1
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 0 \\
+		0 & 1 
+	\end{bmatrix}
+\end{align*}
+We can then obtain $[L]_{B,B}$ by unravelling the matrices from the basis and using them as the columns of $[L]_{B,B}$
+\begin{align*}
+	[L]_{B,B} = \begin{bmatrix}
+		0 & 0 & 0 & 0 \\
+		0 & 1 & -1 & 0 \\
+		0 & -1 & 1 & 0 \\
+		0 & 0 & 0 & 0 
+	\end{bmatrix}
+\end{align*}
+Consider an alternative basis $B'$. 
+\begin{align*}
+	L: &  Mat(2 \times 2, \mathbb{R}) \rightarrow Mat(2 \times 2, \mathbb{R}) \\
+	& A \mapsto A - A^T \\
+	& B' = \begin{bmatrix}
+		1 & 0 \\
+		0 & 0 
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 1 \\
+		1 & 0 
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 0 \\
+		0 & 1
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 1 \\
+		-1 & 0 
+	\end{bmatrix}	
+\end{align*}
+Applying the transformation, we then obtain: 
+\begin{align*}  
+	 L(B') = \begin{bmatrix}
+		0 & 0 \\
+		0 & 0 
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 0 \\
+		0 & 0 
+	\end{bmatrix}, \begin{bmatrix}
+		0 & 0 \\
+		0 & 0
+	\end{bmatrix}, \begin{bmatrix}
+		0 & -2 \\
+		-2 & 0 
+	\end{bmatrix}	
+\end{align*} 
+We need to express the images as linear combinations of $B'$. Trivial for the first three: 
+\begin{align*}  
+	  = 0 \cdot \begin{bmatrix}
+		0 & 0 \\
+		0 & 0 
+	\end{bmatrix} + 0 \cdot \begin{bmatrix}
+		0 & 0 \\
+		0 & 0 
+	\end{bmatrix} + 0 \cdot \begin{bmatrix}
+		0 & 0 \\
+		0 & 0
+	\end{bmatrix} + 2 \cdot  \begin{bmatrix}
+		0 & -1 \\
+		-1 & 0 
+	\end{bmatrix}
+\end{align*} 
+Collect coefficients into a $4 \times 4$ matrix: 
+\begin{align*}
+	\Rightarrow [L]_{B',B'} = \begin{bmatrix}
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 2 
+	\end{bmatrix} \\
+	[L]_{B,B} = \begin{bmatrix}
+		0 & 0 & 0 & 0 \\
+		0 & 1 & -1 & 0 \\
+		0 & -1 & 1 & 0 \\
+		0 & 0 & 0 & 0 
+	\end{bmatrix}
+\end{align*}
+\textbf{The normal form question}: what basis can we choose to obtain the simplest matrix? 
+\section{Compositions of linear maps}
+Let U, V, and W be finite-dimensional VS over k with bases B, B', and B". Let's define two linear maps: 
+\begin{align*}
+	& L_1: U_B \rightarrow V_{B'} \\
+	& L_2: V_{B'} \rightarrow W_{B"} 
+\end{align*}
+Then, we consider the following transformation: 
+\begin{align*}
+	L_2 \circ L_1 = U_B \rightarrow W_{B"} 
+\end{align*}
+\textbf{Question}: how are $[L_1]_{B',B}$, $[L_2]_{B",B'}$, and $[L_2 \circ L_1]_{B", B}$ related? 
+
+\begin{theorem}
+	Let $L_1$ and $L_2$ be defined as above. Let $dim(V) = m$, $dim(V) = k$, and $dim(W) = n$. Then: 
+	\begin{align*}
+		[L_2 \circ L_1 ]_{B", B} = [L_2]_{B",B} \cdot [L_1]_{B',B} 
+	\end{align*}
+\end{theorem}
+This theorem is basically saying that you can obtain a matrix composition by multiplying the matrix maps. This is why matrix multiplication is so complicated; it's defined to be that way such that we can use it for linear maps. 
+\begin{proof}
+	Let $u$ be an arbitrary vector in U. Then, the idea is to simply compute what $[L_2 \circ L_1]_{B", B} [u]_B = [(L_2 \circ L_1)(u)]_{B"}$ is. As was discussed last week, we know that: 
+	\begin{align*}
+		[L_2(L_1(u))]_{B"} = [L_2]_{B", B'}[L_1(u)]_{B'}
+	\end{align*}
+	We are going to apply the same idea but backwards: 
+	\begin{align*}
+		& \Rightarrow [L_2]_{B", B'} [L_1]_{B',B}[u]_B \\
+		& \Rightarrow [L_2 \circ L_1]_{B", B} = \mbox{ product of } [L_2]_{B",B'}[L_1]_{B',B} \\
+		& \Rightarrow [L_2 \circ L_1]_{B", B} = [L_2]_{B", B'} \cdot [L_1]_{B', B} 
+	\end{align*}
+\end{proof}
+
+\section{Matrix Representations of Isomorphisms}
+\begin{theorem}
+	V,W finite-dimensional VS over k, $L:V \rightarrow W$ be linear and let B, B' be bases for V, W, respectively. Claim: the linear map is an isomorphism $\iff$ the matrix representation of the linear map $[L]_{B',B}$ is invertible. This is  the same thing as insisting that L is bijective. 
+\begin{rmk}
+	Consider the identity map, $id: V \rightarrow V$, with $dim(V) = n$, and a basis B. Then: 
+	\begin{align*}
+		[id]_{B,B} = I_n \mbox{ ($n \times n$ identity matrix) } 
+	\end{align*}
+	Why? We can just use the definition of a matrix map. 
+	\newline
+	\newline
+	If $B = (v_1, ..., v_n)$, then the matrix representation of $[id]_{B,B}$ would then be given by: 
+	\begin{align*}
+		([id(v_1)]_B|\hdots | [id(v_n)]_B)
+	\end{align*}
+	From last week's lectures, it therefore follows: 
+	\begin{align*}
+			=	([v_1]_B|\hdots | [v_n]_B)
+	\end{align*}
+	By expressing each $v_i$ as a linear combination of $v_1,..., v_n$, we then obtain the following matrix:
+	\begin{align*}
+		= \begin{bmatrix}
+			1 & 0 & \hdots & 0 \\
+			0 & 1 & \hdots & \vdots \\
+			\vdots & \vdots & \ddots & \vdots \\
+			0 & 0 & \hdots & 1
+		\end{bmatrix}
+		= I_n 
+	\end{align*}
+\end{rmk}
+\end{theorem}
+Now, to prove the theorem: 
+\begin{proof} Proving both directions: \newline
+[ $\Rightarrow$ ] Let L: V (B) $\rightarrow$ W (B') be an isomorphism. This means that L is bijective $\Rightarrow$ automatically has an inverse map that we automatically know is linear: L has an inverse $L^{-1}$ which is $L^{-1} : W_{B'} \rightarrow V_{B}$ We now have: $L^{-1} \circ L: V_B \rightarrow V_B, L^{-1} \circ L = id_V$. 
+\newline
+\newline
+We now apply the remark and composition formula:
+\begin{align*}
+	[L^{-1} \circ L]_{B,B} = I = [L^{-1}]_{B,B'} \cdot [L]_{B',B} 
+\end{align*}
+Matrices whose product is I implies that one of them is invertible. Similarly: 
+\begin{align*}
+	[L]_{B',B} \cdot [L^{-1}] = I \Rightarrow [L]_{B',B} \mbox{ is invertible. } 
+\end{align*}
+[ $\Leftarrow$ ] We know that our matrix is invertible. So, we need to prove that it is bijective. So, let $[L]_{B',B}$ be an invertible $n \times n$ matrix. We will prove that L is injective first. To prove this, we need to show that the kernel is trivial. 
+\newline
+\newline
+Let $v \in Ker(L) \Rightarrow L(v) = 0 \Rightarrow [L(v)]_{B'} = 0$. We then obtain: 
+\begin{align*}
+	 [L]_{B', B} \cdot [v]_B = [L(v)]_{B'} = 0 
+\end{align*}
+We know that $[L]_{B',B}$ is an invertible matrix, so, it cannot be zero. This means that $[v]_B$ must be zero $\Rightarrow$ $v = 0$. We chose an arbitrary vector in the kernel, showed that it was equal to zero. This means that $Ker(L) = \{ 0 \}$, which means that L is injective. 
+\newline
+\newline
+Now, we need to show that L is \textbf{surjective}. Since $[L]_{B',B}$ is an $n \times n$ matrix, we have that: 
+\begin{align*}
+	dim(V) = dim(W) = n 
+\end{align*}
+By the dimension formula, we obtain: 
+\begin{align*}
+	& dim(Ker) + dim(Im) = dim(V)  \\
+	& 0 + dim(Im) = n 
+\end{align*}
+This implies that W is an n-dimensional subspace of an n-dimensional vector space. The only way this is possible is that if $Im(L) = W$, which is the very definition of L being surjective. So, since injectivity and surjectivity hold, we then obtain that L is bijective, and from this we obtain that L is an isomorphism. 
+\end{proof}
+
+\section{Change of Basis}
+There are two questions that will motivate this section: 
+\begin{enumerate}
+	\item Let $v \in V$. Given the coordinate vector $[v]_B$ of $v$ with respect to the basis B, how can we compute the coordinate vector $[v]_{B'}$ with respect to B', another basis for the same vector space? 
+	\item Let $L: V \rightarrow V$ be linear. Given the matrix representation $[L]_{B,B}$, how can we compute $[L]_{B',B'}$. 
+\end{enumerate}
+\subsection{Question 1}
+Consider the linear map $id: V_B \rightarrow V_{B'}$. The matrix representation is given by $[id]_{B',B}$. By definition, we obtain: 
+\begin{align*}
+	[id]_{B',B} [v]_B = [id(v)]_{B'} = [v]_{B'} 
+\end{align*}
+The \textbf{transition matrix/change of basis matrix} from B to B' is given by $[id]_{B',B} \cdot [v]_{B}$. This formula is important: 
+\begin{align}
+	[v]_{B'} = [id]_{B',B} \cdot [v]_B
+\end{align}
+\subsection{Question 2}
+Consider the following sequence of maps: 
+\begin{align*}
+	V_{B'} \xrightarrow{id} V_{B} \xrightarrow{L} V_{B} \xrightarrow{id} V_{B'}  
+\end{align*}
+Then, 
+\begin{align*}
+	& [L]_{B',B'}= [id \circ L \circ id]_{B',B'} \\
+	& \Rightarrow [id]_{B',B} [L]_{B,B} [id]_{B,B'} \\
+	& \Rightarrow ([id]_{B,B'})^{-1} [L]_{B,B} [id]_{B,B'} 
+\end{align*}
+Therefore, $[L]_{B,B}$ and $[L]_{B',B'}$ are similar matrices. 
+This is \textbf{how we transform one matrix representation to another}. Representations of the same linear map are possible if there exists an invertible matrix P.
+\begin{defn}
+	Two $n$ by $n$ matrices A,B with coefficients in $K$ are called \textbf{similar} if there exists an invertible $n \times n$ matrix P with: 
+	\begin{align*}
+		B = P^{-1} A P
+	\end{align*}
+	Thus, any two matrix representations of the same linear map $L: V \rightarrow V$ with respect to bases B, B' are similar. 
+\end{defn}
+\textbf{\underline{Special Case (Most important)}}
+\newline
+V = $K^n$ with two bases: the standard basis S and an arbitrary basis B. \textbf{First Question:} if we consider the vectors in $K^n$ as row vectors, what is the coordinate vector of $[v]_s$?  The solution: 
+\begin{align*}
+	[v]_s = v^t
+\end{align*}
+How can we compute the coordinate vector $[v]_B$? 
+\begin{align*}
+	[v]_B = [id]_{B,S}[v]_S 
+\end{align*}
+Where $[id]_{S,B}$ is the transition matrix B to S. Now, we can \textbf{feed in arbitrary members of B} by expressing them in terms of the standard basis. Let $B = (v_1, ..., v_n)$. Then: $[id]_{S,B} = (v_1^t | \cdots | v_n^t)$ and $[id]_{B,S} = ([id]_{S,B})^{-1}$. So, we can basically find the vector in terms of the original basis by ``inverting'' the transformation: 
+\begin{align*}
+	[v]_B = P^{-1}[v_s] 
+\end{align*}
+Where $P = (v_1^t| \cdots | v_n^t)$. 
+\begin{exmp}
+	V = $\mathbb{R}^2$, S standard basis, and $B = ((1,1),(3,2))$. From this, we can obtain two change of basis matrixes: 
+	\newline
+	\newline
+	$[id]_{S,B}$: from B to S. Relatively straightforward; just take the rows of B and use them as the columns of the change of basis matrix: 
+	\begin{align*}
+		[id]_{S,B} = \begin{bmatrix}
+			1 & 3 \\
+			1 & 2 
+		\end{bmatrix}
+	\end{align*}
+	$[id]_{B,S}$ this is more complicated; we need to compute $([id]_{S,B})^{-1}$. We then obtain: 
+	\begin{align*}
+		[id]_{B,S} = \begin{bmatrix}
+			-2 & 3 \\
+			1 & -1 
+		\end{bmatrix}
+	\end{align*}
+	Putting it all together, we then obtain: 
+	\begin{align*}
+		[v]_B = [id]_{B,S} = [v]_S
+	\end{align*}
+
+\end{exmp}
+\begin{exmp}
+	$v = (2,3)$. So, $[v]_S = \begin{pmatrix}
+		2 \\ 3 
+	\end{pmatrix}$. We can obtain $[v]_B$ by: 
+	\begin{align*}
+		[v]_B = \begin{bmatrix}
+			-2 & 3 \\
+			1 & -1 \\ 
+		\end{bmatrix} \begin{bmatrix}
+			2 \\
+			3 
+		\end{bmatrix} = \begin{bmatrix}
+			5 \\
+			1
+		\end{bmatrix}
+	\end{align*}
+\end{exmp}
+\begin{exmp}
+	$L: \mathbb{R}^2 \rightarrow \mathbb{R}^2$. Remark that this is an endomorphism. Let this linear map define the projection onto the x-axis; i.e,: 
+	\begin{align*}
+		& L((1,0)) = (1,0) \\
+		& L((0,1,)) = (0,0) \\
+		& \Rightarrow [L]_{S,S}  = \begin{bmatrix}
+			1 & 0 \\
+			0 & 0 
+		\end{bmatrix}
+	\end{align*}
+	Using the formula, we then obtain: 
+	\begin{align*}
+		[L]_{B,B} &  = [id]_{B,S} \cdot [L]_{S,S} \cdot [id]_{S,B} \\
+		& = ([id]_{S,B})^{-1} [L]_{S,S} [id]_{S,B} \\ 
+		& = \begin{bmatrix}
+			-2 & 3 \\
+			1 & -1 
+		\end{bmatrix} \begin{bmatrix}
+			1 & 0 \\
+			0 & 0  
+		\end{bmatrix} \begin{bmatrix}
+			1 & 3 \\
+			1 & 2 
+		\end{bmatrix} = \begin{bmatrix}
+			-2 & -6 \\
+			1 & 3
+		\end{bmatrix}
+	\end{align*}
+To check if your solution is correct, you feed in a coordinate vector, compute the output, and verify that it is correct. 
+\end{exmp}
+\begin{exmp}
+	V = Mat($2 \times 2, \mathbb{R}$), $L: A \mapsto A - A^t$. Define the following bases: 
+	\begin{align*}
+		B = \begin{bmatrix}
+			1 & 0 \\
+			0 & 0 
+		\end{bmatrix}, \begin{bmatrix}
+			0 & 1 \\
+			0 & 0 
+		\end{bmatrix}, \begin{bmatrix}
+			0 & 0 \\
+			1 & 0 
+		\end{bmatrix}, \begin{bmatrix}
+			0 & 0 \\
+			0 & 1 
+		\end{bmatrix} \\
+		B' = \begin{bmatrix}
+			1 & 0 \\
+			0 & 0 
+		\end{bmatrix}, \begin{bmatrix}
+			0 & 1 \\
+			1 & 0 
+		\end{bmatrix}, \begin{bmatrix}
+			0 & 0 \\
+			0 & 1 
+		\end{bmatrix}, \begin{bmatrix}
+			0 & 1 \\
+			-1 & 0 
+		\end{bmatrix}
+	\end{align*}
+	Last class, we computed the following matrices: 
+	\begin{align*}
+		& [L]_{B,B} = \begin{bmatrix}
+			0 & 0 & 0 & 0 \\
+			0 & 1 & -1 & 0 \\
+			0 & -1 & 1 & 0 \\
+			0 & 0 & 0 & 0 
+		\end{bmatrix}, [L]_{B', B'} = \begin{bmatrix}
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 0 \\
+			0 & 0 & 0 & 2
+		\end{bmatrix}  \\
+		& [id]_{B,B'} = \begin{bmatrix}
+			1 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 1 \\
+			0 & 1 & 0 & -1 \\
+			0 & 0 & 1 & 0 
+		\end{bmatrix}, [id]_{B',B} = ([id]_{B,B'})^{-1} = \frac{1}{2} \begin{bmatrix}
+			2 & 0 & 0 & 0 \\
+			0 & 1 & 0 & 0 \\
+			0 & 0 & 0 & 2 \\
+			0 & 1 & -1 & 0 
+		\end{bmatrix}
+	\end{align*}
+\end{exmp}
+\section{The Normal Form Problem}
+Similar matrices represent the same linear map with respect to different bases. So, let $A \in MAT(n \times n, k)$. Let $L_A: K^n \rightarrow k^n$, $v \mapsto Av$. Let S be a standard basis for $K^n$ be an arbitrary basis. Then, $[L_A]_{S,S} = A, B = \{ v_1, ..., v_n \}$. Then: 
+\begin{align*}
+	[L_A]_{S,S}&  = [id]_{B,S} [L_A]_{S,S} [id]_{S,B} \\
+				& =  P^{-1} A P 
+\end{align*}
+Where the columns of P consist of the vectors in B written as column vectors: $P = (v_1^t | \cdots | v_n^t)$. P is invertible $\Rightarrow$ we have n linearly independent columns in $K^n$ $\Rightarrow$ they span $K^n$ $\Rightarrow$ they form a basis for $K^n$. 
+\newline
+\textbf{\underline{Algebra Crash Course}}
+\newline 
+\textbf{General linear group}: denoted $P \in GL(n,k)$, a general linear group is the set of all invertible $n \times n$ matrices with coefficients in k. It's a group. 
+\newline
+\newline
+\textbf{Question:} can we interpret $P^{-1}AP$ as the matrix representation of our linear map L with respect to some basis B of $K^N$? Yes! We can just take $P = (v_1^t | \cdots | v_n^t)$. Here's the chain of reasoning: P is invertible $\Rightarrow$ $(v_1, ..., v_n)$ are linearly independent; $dim(K^n) = n$ $\Rightarrow$ $\{ v_1, ..., v_n \}$ also span $K^n$ $\Rightarrow$ basis for $K^n$. So, we can write: 
+\begin{align*}
+	[L_A] = P^{-1}AP
+\end{align*}
+We will see that there is a one-to-one correspondence between matrix representations of our linear map L and matrices similar to A. In other words: \textbf{matrices similar to A can be interpreted as representing the same linear map, just with respect to a different basis}. So, in the Linear Algebra Universe, they're practically equivalent. This brings us to the final section.
+\section{Similarity Problem}
+\textbf{Motivation:} we are interested in knowing the set of all matrices $\in$ MAT $(n \times n, k)$ similar to A. This is the \textbf{similarity problem}. This introduces a relation: a set of any two matrices can be similar or not. We obtain two mathematical relations from this: 
+\begin{enumerate}
+	\item Order
+	\item Class of equivalence
+\end{enumerate}
+\begin{defn}
+	Let $A, B \in MAT (n \times m, k)$. B is said to be \textbf{similar} to A, in symbols, $B \sim A$, if there exits a $P \in GL(n,k)$ such that
+	\begin{align*}
+		B = P^{-1} A P 
+	\end{align*}
+\end{defn}
+Before this, we need more quick algebra. 
+\subsection{Quick Algebra}
+\begin{defn}
+	Let S be a set. An \textbf{equivalence relation} is a subset of the cartesian product, $S \times S$. In maths, it's denoted by a $\sim$ and has the following three properties: 
+	\begin{enumerate}
+		\item \textbf{Identity:} every element of S is in relation with itself: 
+		\begin{align*}
+			\forall x \in S, x \sim s
+		\end{align*}
+
+	\item \textbf{Commutativity}: 
+	\begin{align*}
+		\forall x, y \in S, \mbox{ if } x \sim y, \mbox{ then } y \sim x \\
+		\mbox{ Alternatively: } x \sim y \iff y \sim x
+	\end{align*}
+	\item \textbf{Transitivity:} 
+	\begin{align*}
+		\forall x, y, z \in S, \mbox{ if } x \sim y \land y \sim z \Rightarrow x \sim z
+	\end{align*}
+	\end{enumerate}
+\end{defn}
+\begin{exmp}
+	$S = \mathbb{Z}, n \sim k \iff n-k$ is even. \textbf{Claim:} this is an equivalence relation. We can check this with the axioms. 
+	\begin{enumerate}
+		\item $n \sim n$ since $n-n =0$ which is even. 
+		\item $n \sim k \Rightarrow n-k$ is even $\iff k-n$ is even $\Rightarrow k \sim n$. 
+		\item $n \sim k \land k \sim m \Rightarrow$ show that $n-m$ is also even: $(n-k) + (k-m) \Rightarrow$ we have the sum of two even things, so the sum will also be even and we have $n \sim m$, as desired. 
+	\end{enumerate}
+\end{exmp}
+\textbf{\underline{Main idea:} equivalence relationships partition things into classes. In this case, all even numbers are similar/equivalent to zero and all odd numbers are equivalent to 1. So, we have the set of all integers partitioned into two, disjoint groups: (1) odd numbers, and (2) even numbers.}
+\begin{align*}
+	\mbox{ The set of all } \{ n \in Z\  n \sim 0 \} = \{ ...,-4,-2,0,2,4,...\} \mbox{ (the set of all even numbers) } \\
+		\mbox{ The set of all } \{ n \in Z\  n \sim 1 \} = \{ ...,-3,-1,1,3,...\} \mbox{ (the set of all odd numbers) } 
+\end{align*}
+\begin{defn}
+	Let S be a set, $s \in S, \sim$ an equivalence relation on S. Then, we can define the \textbf{equivalence class} of S as follows: 
+	\begin{align*}
+		[s]_{\sim} := \{ t \in S\ |\ t \sim S \} 
+	\end{align*}
+\end{defn}
+Remark that $s \in [S]_{\sim}$ by axiom 1 of equivalence relations. Back to our example: 
+\begin{exmp}
+	$S \in \mathbb{Z}, \sim, n-k$ even. Then: 
+	\begin{enumerate}
+		\item $[0]$ is the set of all even numbers. 
+		\item $[1]$ is the set of all odd numbers. 
+	\end{enumerate}
+	These are equivalence classes that \textbf{partition} $\mathbb{Z}$ (the set containing all integers). This, in fact, is true in general: 
+	\begin{theorem}
+		Let S be a set, $\sim$ be an equivalence relation. The equivalence classes of $\sim$ \textbf{partition} S, i.e., every $s \in S$ is contained in an equivalence class and any two equivalence classes are either \textbf{identical} or \textbf{disjoint}. 
+	\end{theorem}
+Proof is next class...
+\end{exmp}
+\end{document}

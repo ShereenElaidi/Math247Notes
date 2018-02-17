@@ -1,0 +1,623 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\newcommand{\forceindent}{\leavevmode{\parindent=3em\indent}}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[margin=2cm]{geometry}
+\newtheorem{theorem}{Theorem}
+\usepackage{layout}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{color,soul}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{color}
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array, booktabs}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{color}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{mathrsfs}
+\newsavebox\foobox
+\newlength{\foodim}
+\newcommand{\slantbox}[2][0]{\mbox{%
+        \sbox{\foobox}{#2}%
+        \foodim=#1\wd\foobox
+        \hskip \wd\foobox
+        \hskip -0.5\foodim
+        \pdfsave
+        \pdfsetmatrix{1 0 #1 1}%
+        \llap{\usebox{\foobox}}%
+        \pdfrestore
+        \hskip 0.5\foodim
+}}
+\def\Laplace{\slantbox[-.45]{$\mathscr{L}$}}
+\setlength{\arrayrulewidth}{0.2mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.0}
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}[section]
+
+%TO USE CODE
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$ $},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+
+
+
+\title{\textbf{Math 247: Applied Linear Algebra} \vspace{-2ex}}
+\author{\textbf{Week 5 Course Notes} \vspace{-2ex}}
+\date{}
+
+
+\newenvironment{enumerate_tight}{
+	\begin{enumerate}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{enumerate}}
+\newenvironment{itemize_tight}{
+	\begin{itemize}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{itemize}}
+
+\begin{document}
+
+\maketitle
+\textbf{Main topics}: Endomorphisms, surjectivity, injectivity, coordinate vectors, bijective, matrices, transformations
+
+\pagestyle{fancy}
+\lhead{Math 247: Applied Linear Algebra}
+\rhead{}
+\rhead{Revision Notes}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+{\renewcommand{\arraystretch}{1.2}% for the vertical padding
+
+\section{Endomorphisms}
+
+\begin{defn}
+	A linear map $L : V \rightarrow V$, V VS over K, is called an \textbf{endomorphism}. In other words, this is a linear from a vector space to itself. 
+\end{defn}
+
+\begin{theorem}
+	Let V be a finite-dimensional VS over K, $L: V \rightarrow V$ an endomorphism. Then, we have: 
+\begin{center}
+	L is bijective $\iff$ L is injective $\iff$ L is a surjection 
+\end{center}
+This theorem does not hold for infinite-dimensional VS. Examples were already discussed...
+\end{theorem}
+Before the proof, here is a useful lemma
+\begin{lemma}
+	Let V be a finite-dimensional VS over k and let $U \geq V$ s.t. dim(U) = dim(V). Then, we have that \textbf{U = V}. 
+\end{lemma}
+
+\begin{proof}
+	Let $\{v_1,...,v_n \}$ be a basis for U. This especially means that the vectors are linearly independent. This means we the basis of V will also contain $n$ elements, since their dimensions are equal. 
+	\begin{align*}
+		& \Rightarrow \{ u_1, ..., u_n\} \mbox{ is linearly independent} \Rightarrow n = dim(U) = dim(V). \\
+		& \Rightarrow \{ u_1, ..., u_n \} \mbox{ is a basis or V, and it especially spans V} \Rightarrow U = V
+	\end{align*}
+	Trick: vector spaces are equal if they contain bases that span the same area. 
+\end{proof}
+Now, we need to prove the theorem.
+\begin{proof}
+	We only need to prove the non-trivial implications. 
+	\newline
+	[ $\Rightarrow$ ] Injectivity $\Rightarrow$ surjectivity \newline 
+	The proof of this direction is a consequence of the dimension formula. Recall: 
+	\begin{align*}
+		dim(Ker) + dim(Im) = dim(V)
+	\end{align*}
+	By assumption, we are given that L is injective. So: $ker(K) = \{ 0 \} \Rightarrow dim(Ker) =0$. 
+	Plugging this into our formula, we then obtain: 
+	\begin{align*}
+		dim(Im) = dim(V)
+	\end{align*}
+	Now, we are in the exact situation of the lemma: we have an endomorphism with $im(L) \leq V$ of the same dimension. By the lemma, we then obtain that $im(L) = V \Rightarrow L$ is surjective. 
+	\newline
+	\newline
+	[ $\Rightarrow$ ] Surjective $\Rightarrow$ injective \newline
+	We assume that L is surjective. It then follows that $im(L) = V$. We then obtain the following:
+	\begin{align*}
+		& \Rightarrow dim(Im(L)) = dim(V) \\
+		& \Rightarrow dim(Ker(L)) + dim(Im) = dim(V) \\
+		& \Rightarrow dim(Ker(L)) = 0 \Rightarrow Ker = \{ 0 \} 
+	\end{align*}
+	If the kernel is 0, then L is injective and we are done. 
+\end{proof}
+
+\begin{rmk}
+	Comparable results are wrong in almost any other context. The result is also in general wrong for endomorphisms between infinite-dimensional vector spaces. 
+\end{rmk}
+
+\section{Coordinate Vectors}
+All bases in this section are considered to be \textbf{ordered}, and are therefore written as a tuple to maintain order: 
+\begin{align*}
+	B = (v_1, v_2, ..., v_n) 
+\end{align*}
+In this section, we will consider vectors in $\mathbb{R}^n$ or $\mathbb{C}^n$ as \textbf{column-vectors} since we will be introducing matrices soon. 
+\newline
+\newline
+Let V be a finite-dimensional VS over $k$. Considered the ordered basis below: 
+\begin{align*}
+	B = (v_1, ..., v_n)
+\end{align*}
+Let $v \in V$. Then, there exists uniquely determined $a_1,..,a_n \in K$ such that: 
+\begin{align*}
+	v = a_1v_1 + ... + a_n v_n 
+\end{align*}
+This uniqueness implies that we can find any vector just with its coefficients. If we collect all these coefficients into a single object of size $n \times 1$, we obtain a \textbf{column vector}: 
+\begin{align*}
+	\begin{bmatrix}
+		a_1 \\
+		\vdots \\
+		a_n
+	\end{bmatrix} \in \mathbb{K}^n
+\end{align*}
+This object uniquely represents $v$ and is called the \textbf{coordinate vector of v with respect to our choice of basis}. It is symbolized as: $[\ v\ ]_B$. Now, we have an object representing the coefficients. It induces a map from $V \rightarrow K^n$, and, it turns out that this map is both bijective and linear. 
+\newline
+\newline
+Now, consider the following coordinate map: 
+\begin{align*}
+	[\ ]_B: V \rightarrow K^n; \mbox{   } v \mapsto [\ v\ ]_b 
+\end{align*}
+Here, $v$ maps to its coordinate vector with respect to B, which lives in $K^n$. We obtain the following useful theorem:
+\begin{theorem}\label{coordinate_bij}
+	Let V be finite-dimensional, B an ordered basis for V. Then, $	[\ ]_B: V \rightarrow K^n; \mbox{   } v \mapsto [\ v\ ]_b $ is linear and bijective, and it is called an \textbf{isomorphism}.  
+\end{theorem} 
+\begin{proof}
+	We need to prove two things: (1) linearity and (2) bijectivity. 
+	\newline
+	\newline
+	\textbf{Linearity:} most of the work for this was done at the beginning of class. Let $B = (v_1, ..., v_n)$. We then obtain: 
+	\begin{align*}
+		& [\ v_1\ ]_B = 1 \cdot v_1 + 0 \cdot v_2 + ... + 0 \cdot v_n = \begin{pmatrix}
+			1 \\ 
+			0 \\
+			\vdots \\
+			0 \\ 
+		\end{pmatrix} = e_1 \\
+		& [\ v_2\ ]_B = 0 \cdot v_1 + 1 \cdot v_2 + ... + 0 \cdot v_n = \begin{pmatrix}
+			0 \\ 
+			1 \\
+			\vdots \\
+			0 \\ 
+		\end{pmatrix} = e_2 \\
+		\vdots \\
+		& [\ v_n\ ]_B = 0 \cdot v_1 + 0 \cdot v_2 + ... + 1 \cdot v_n = \begin{pmatrix}
+			0 \\ 
+			0 \\
+			\vdots \\
+			1 \\ 
+		\end{pmatrix} = e_n \\	
+	\end{align*}
+We then use the existence theorem (proven last class): there exists a uniquely determined linear map L , $V \rightarrow k^n$ with $L(v_1) = e_1,..., L(v_n) = e_n$. We have a formula for this: 
+\begin{align*}
+	L( a_1 v_1, ..., a_n v_n) & = a_1 e_1 + ... + a_n e_n  \\
+	& = \begin{pmatrix}
+		a_1 \\
+		a_2 \\
+		... \\
+		a_n \\ 
+	\end{pmatrix}
+\end{align*}
+	This is precisely what the coordinate map $L = [\ ]_B$ is $\Rightarrow$ $[\ ]_B$ is linear (we obtain that for free from Theorem \ref{coordinate_bij}). 
+\textbf{Proving bijectivity}: To prove bijectivity, we will prove injectivity and surjectivity. 
+\newline
+\newline
+\textbf{Injective:} We know that $[\ v\ ]_B = \begin{pmatrix}
+	0 \\
+	0 \\
+	... \\
+	0 
+\end{pmatrix} \iff v = 0 \cdot v_1 + ... + 0 \cdot v_n$. The matrix is the image. This means that $Ker([\ v\ ]_B$ is trivial. A trivial kernel means injectivity. 
+\newline
+\newline
+\textbf{Surectivity}: If we let $\begin{pmatrix}
+	a_1 \\
+	\vdots \\
+	a_n \\
+\end{pmatrix} \in K^n$ be arbitrary. We need to then find a vector in V whose coordinate map is that object. But, we can express any vector in v as a linear combination of the basis vectors, i.e.,: 
+\begin{align*}
+	v:= a_1 v_1 + ... + a_n v_n 
+\end{align*}
+Then: $[\ v\ ]_B = \begin{pmatrix}
+	a_1 \\
+	\vdots \\
+	a_n \\
+\end{pmatrix}$. Therefore, we have proven that it is surjective. 
+\newline
+So, we have a bijective map. Combined with linearity, we have that this is an isomorphic map. This is useful because in algebra, isomorphic objects have the same properties. The ``different objects'' are simply re-labeling. 
+\end{proof}
+\begin{theorem}
+	Crux: if you have bijectivity, then you have an inverse. 
+	\newline
+	More formally: let $L : V \rightarrow W$ be an isomorphism. Since L is bijective, it is invertible $\rightarrow$ it has an inverse map $L^{-1}$. So, the claim we need to prove that 
+	\begin{align*}
+		L^{-1}: W \rightarrow V
+	\end{align*}
+	is linear. 
+\end{theorem}
+\begin{proof}
+	Let $w_1, w_2 \in W$. Then, there exists  a uniquely determined $v_1, v_2 \in V$ with $L(v_1) = w_1, L(v_2) \ w_2$. Then, by the linearity of L, we obtain: 
+	\begin{align*}
+		L^{-1} (w_1 + w_2) = L^{-1} (L(v_1) + L(v_2)) 
+	\end{align*}
+	Since we know that \textbf{L is linear}, we can then simplify: 
+	\begin{align*}
+		& \Rightarrow L^{-1}(L(v_1 + v_2)) \\
+		& \Rightarrow v_1 + v_2 \mbox{ (since inverses cancel out) } \\
+		& \Rightarrow L^{-1}(w_1) + L^{-1}(w_2) 		\mbox{ (by construction) }
+	\end{align*}
+	We have proven that $L^{-1}$ respects addition. Similarly, we can prove that it also respects scalar multiplication. Let $k \in K$. We then obtain: 
+	\begin{align*}
+		L^{-1} (k w_1)&  = L^{-1}(k(L(v_1)) = kv_1 = K L^{-1} (w_1) \\
+		& \Rightarrow L^{-1}(kw_1) = kL^{-1}(w_1) 
+	\end{align*}
+	Therefore, $L^{-1}$ is linear and we are done; we have no additional condition. This case holds in finite and infinite-dimensional cases. 
+\end{proof}
+\begin{theorem}
+	Let V be a VS over $k$ of dim $n$. Then, V is isomorphic to $K^n$. This means that there is only ONE vector space over K per dimension. This theorem makes linear algebra very applicable to other fields. 
+\end{theorem}
+\begin{proof}
+	Let B be an ordered basis for V. Then, $[\ ]_B: V \rightarrow K^n$ is an isomorphism by Theorem \ref{coordinate_bij}.  
+\end{proof}
+All of linear algebra is over $K^n$. Matrices are the equivalent of linear maps. So, the key question that remains is: \textbf{how can we interpret linear maps as matrices?}. 
+
+\section{Representations of Linear Maps as Matrices}
+\textbf{Motivation:} Let V, W be finite-dimensional VS over k. Let L be a linear map, $V \rightarrow W$. Let B be a set of ordered bases for V, and B' be an ordered basis for W. 
+\newline 
+\newline
+Consider the coordinate vector: 
+\begin{align*}
+	[\ v\ ]_B;\ dim(V) = m, dim(W) = n 
+\end{align*}
+If we let $v \in V$ and $w \in W$. Then, consider the following: 
+\begin{align*}
+	[\ v\ ]_B \in K^m;\ [\ w\ ]_B \in K^w
+\end{align*}
+If w is the image under L(v), then L would map m-tuple to n-tuple by an $n \times m$ matrix. \textbf{Does there exist such a matrix that mimics what the linear map L does? In other words, does there exist an $n \times m$ matrix A with coefficients in K that mimics the action of L?} 
+\begin{align*}
+	A \cdot [\ v\ ] = [\ w\ ] 
+\end{align*}
+
+If this happens, then we say that \textbf{A is the matrix representation of L with respect to B and B'}. 
+\newline
+\newline
+\textbf{Question:} how do we construct this map? 
+\newline 
+\textbf{Idea:} before we construct A in the general case, we will re-visit the more concrete or classical case of $V = K^m$ and $w = K^n$, with B being the standard basis of $K^m$ and B' the standard basis of $K^n$. Then, by what we know from Math 133, the linear map $L: K^m \rightarrow K^n$ is of the form $L(x) = Ax$, where A is an $n \times n$ matrix. Once we understand the concrete case, we will copy-and-paste it to the abstract case. 
+\begin{align*}
+	A = \begin{pmatrix}
+		a_{11} & \hdots & a_{1m} \\
+		\vdots & \ddots & \vdots \\
+		a_{n1} & \hdots & a_{nm} 
+	\end{pmatrix}
+\end{align*}
+We know that $Ae_1 = L(e_1) = \begin{pmatrix}
+	a_{11} \\
+	\vdots \\
+	a_{n1} 
+\end{pmatrix}$, i.e., the first column of A. Continuing this, we then obtain that: $Ae_m = L(e_m) = \begin{pmatrix}
+	a_{nm} \\
+	\vdots \\
+	a_{nn}
+\end{pmatrix}$,i.e., the mth coolumn of A. 
+\newline
+\newline
+\textbf{The following construction is CRITICAL:}
+\begin{align*}
+\huge{
+	A = (L(e_1)\ |\ L(e_2)\ |\ \cdots |\ L(e_m)\ )}
+\end{align*}
+This actually makes perfect sense with our basis being $(b_1, b_2,..., b_m)$ From this, we can obtain any $n \times m$ matrix. This will motivate our matrix representation of a map. 
+\newline
+\textbf{Generalizing...}
+\newline
+Let $L: V \rightarrow W$ be linear, V,W, VS over K, dimension of V = m and dimension of W = n. $B = \{ v_1, ..., v_m \}$  is a basis for V, $B' = \{ w_1, ..., w_n \}$ is a basis for W. We could map all the members of our basis under L. 
+\newline 
+\newline
+We will define the following: let $[\ L\ ]_{B',B}$ be the matrix representation of L with respect to the two bases B and B` by: 
+\begin{align*}
+	[\ L\ ]_{B', B} = ( L(v_1)_{B'}\ |\ \cdots |\ L(v_m)_{B'}\ ) 
+\end{align*}
+Each of the components are $n \times 1$ vectors, and we have $m$ columns in total. Hence, w obtain a $n \times m$ matrix. 
+\begin{theorem}
+	$L: V \rightarrow W$ be linear, dim(V) = m, dim(W) = n, $\{ v_1, ..., v_n\} = B$ basis for V, $B' = \{ w_1, ..., w_n \}$ basis for W. Then: 
+	\begin{align*}
+		[\L(v)\ ]_{B'} = [\ L\ ]_{B', B} [\ v\ ]_B\ \forall v \in V
+	\end{align*}
+	Breaking this down, we obtain that....
+	\begin{align*}
+		& [L]_{B' B} \mbox{ is an n by m matrix}\\
+		& [v]_B = \mbox{ is an m by 1 column vector}\\
+		& [L(v)]_{B'} = \mbox{ is an n by 1 column vector }\\
+	\end{align*}
+\end{theorem}
+The idea here is that we can \textbf{mimic the action of L by matrix multiplication}. 
+\begin{proof}
+	Let $v \in V$ be arbitrary. Then, we can write $v$ as a linear combination of some sort of basis vector: 
+	\begin{align*}
+		v = a_1 v_1 + ... + a_m v_m 
+	\end{align*}
+	First, we need to obtain the coordinate vector of $v$. That is given by:
+	\begin{align*}
+		[\ v\ ]_B = \begin{pmatrix}
+			a_1 \\
+			\vdots \\
+			a_m \\
+		\end{pmatrix}
+	\end{align*}
+	Using the formula from above, we calculate the expression on the RHS: 
+	\begin{align*}
+		[\ L\ ]_{B'B} [\ v\ ]_B = ([L(v_1)_{B'}]\ | \hdots |\ [L(v_m)]_{B'}) \cdot \begin{pmatrix}
+			a_1 \\
+			\vdots \\
+			a_n 
+		\end{pmatrix}
+	\end{align*} 
+\end{proof}
+Recall from Math 133 that we can take a linear combination of the columns  and obtain: 
+\begin{align*}
+	& = a_1 [L(v_1)]_{B'} + ... + a_m [L(v_m)]_{B'}
+\end{align*}
+Because the coordinate map $[\ ]_{B'}: W \rightarrow K^n$ is linear, we can move in the constants: 
+\begin{align*}
+	& = [a_1L(v_1)]_{B'} + ... + [a_mL(v_m)]_{B'}
+\end{align*}
+Applying linearity once more, we then obtain:
+\begin{align*}
+	& = [a_1 L(v_1) + ... + a_m L(v_m)]_{B'}
+\end{align*}
+And, we can play the same game once more: 
+\begin{align*}
+	&= [\ L(a_1v_1 + ... + a_m v_m)\ ]_{B'}\\
+	& = [L(v)]_{B'}
+\end{align*}
+\begin{theorem}
+	Let $L: V \rightarrow W$, V, W, finite-dimensional, L linear, B a basis for V, and B' a basis for W, $A:=[\ L\ ]_{B',B}$. Then:
+	\begin{itemize}
+		\item Then, Ker(L) isomorphic to nullspace(A). 
+		\item Then, Im(L) isomorphic to colspace(A). 
+	\end{itemize} 
+\end{theorem}
+The isomorphism is given by:
+\begin{itemize}
+	\item $Ker(L) \rightarrow nullspace(A)$ 
+	\begin{align*}
+		v \mapsto [\ v\ ]_B
+	\end{align*}
+	\item $im(L) \rightarrow colspace(A)$ 
+	\begin{align*}
+		w \mapsto [\ w\ ]_{B'} 
+	\end{align*}
+\end{itemize}
+
+\begin{proof}
+	$v \in Ker(L) \iff L(v) = 0 \iff [L(v)]_{B'} = 0 $ \\
+	Using the formula, we then obtain that
+	\begin{align*}
+		0 = A [\ v\ ]_B
+	\end{align*}
+	This happens iff $[v]_B \in $ nullspace(A). Now, for image: Let $w \in Im(L)$ This happens $\iff \exists v \in V\ |\ L(v) = w$ which happens $\iff [L(v)]_{B'} = [w]_{B/}$. We know that the LHS is equal to: $[L]_{B', B} \cdot [v]$. But, this is precisely $Ax$, so we then obtain the following: $\iff [\ w\ ]_B \in colspace(A)$. 
+\end{proof}
+
+\begin{exmp}
+	Consider $D: P_2(\mathbb{R}) \rightarrow P_2 (\mathbb{R})$ (this is an endomorphism, so it is customary to choose the same basis). 
+	\begin{align*}
+		B = B' = (1,x,x^2); \mbox{ } D(p) := p' \\
+		[D]_B = ? \mbox{ How can we calculate this?} 
+	\end{align*}
+	We will work through the machinery: 
+	\begin{align*}
+		D(1) = 0
+	\end{align*}
+	We will then express the result as a linear combination of the basis members and collect coefficients: 
+	\begin{align*}
+		& D(1) = 0 =  0 \cdot 1 + 0 \cdot x + 0 \cdot x^2 \\
+		& D(x) = 1 = 1 \cdot 1 + 0 \cdot x + 0 \cdot x^2 \\
+		& D(x^2) = 2x = 0 \cdot 1 + 2 \cdot x + 0 \cdot x^2 
+	\end{align*}
+	We then take each derivative entry and put the as the columns of the matrix, as we did with the formula: 
+	\begin{align*}
+		\Rightarrow [D]_{BB} = \begin{pmatrix}
+			0 & 1 & 0 \\
+			0 & 0 & 2 \\
+			0 & 0 & 0 
+		\end{pmatrix}
+	\end{align*}
+	This matrix represents the transformation of the derivative. The theory basically tells us how we can differentiate a polynomial via matrix multiplication. 
+	\textbf{Obtaining the kernel and the image}: 
+	\begin{itemize}
+		\item Ker(D) = set of all constant polynomials, $P_{0}(\mathbb{R})$. 
+		\item Im(D) = $p_1(\mathbb{R})$. 
+	\end{itemize}
+\end{exmp}
+
+\begin{exmp}
+	$L:  Mat(2 \times 2, \mathbb{R}) \rightarrow Mat(2 \times 2, \mathbb{R})$, $A \mapsto A - A^T$. The fact that L is linear is trivial, just simplify using the properties of transposes from Math 133. Now, let $B = B'$. We again have an endomorphism. Standard basis: 
+	\begin{align*}
+		B = B' = \{ \begin{pmatrix}
+			1 & 0 \\
+			0 & 0 
+		\end{pmatrix}, \begin{pmatrix}
+			0 & 1 \\
+			0 & 0 
+		\end{pmatrix}, \begin{pmatrix}
+			0 & 0 \\
+			1 & 0 
+		\end{pmatrix}, \begin{pmatrix}
+			0 & 0 \\
+			0 & 1 
+		\end{pmatrix}
+		\}
+	\end{align*}
+	We then obtain the matrix representation of our linear transformation: 
+	\begin{align*}
+		& L(M_{11}) = 0 \cdot M_{11} + 0 \cdot M_{12} + 0 \cdot M_{21} + 0 \cdot M_{22} \\ 
+		& L(M_{12}) = 0 \cdot M_{11} + 1 \cdot M_{12} + (-1) \cdot M_{21} + 0 \cdot M_{22} \\ 	
+		& L(M_{21}) = 0 \cdot M_{11} + (-1) \cdot M_{12} + 1 \cdot M_{21} + 0 \cdot M_{22} \\
+		& L(M_{22}) = 0 \cdot M_{11} + 0 \cdot M_{12} + 0 \cdot M_{21} + 0 \cdot M_{22} 
+	\end{align*}
+	\begin{align*}
+		\Rightarrow [L]_{BB} = \begin{pmatrix}
+			0 & 0 & 0 & 0 \\
+			0 & 1 & -1 & 0 \\
+			0 & -1 & 1 & 0 \\
+			0 & 0 & 0 & 0 
+		\end{pmatrix}
+	\end{align*}
+	For example, if we wanted to differentiate $A := \begin{bmatrix}
+		2 & 1 \\
+		3 & -1
+	\end{bmatrix}$, we could carry out the following matrix multiplication: 
+	\begin{align*}
+		& \Rightarrow [A]_B \cdot [L]_{BB} = [L(A)]_B  \\
+		& \Rightarrow \begin{bmatrix}
+			0 & 0 & 0 & 0 \\
+			0 & 1 & -1 & 0 \\
+			0 & -1 & 1 & 0 \\
+			0 & 0 & 0 & 0 
+		\end{bmatrix} \begin{bmatrix}
+			2 \\
+			1 \\
+			3 \\
+			-1 
+		\end{bmatrix} = \begin{bmatrix}
+			0 \\
+			-2 \\
+			2 \\
+			0 
+		\end{bmatrix} = [L(A)]_B
+	\end{align*}
+	Tobtain the \textbf{kernel}, we need to carry the matrix to reduced row-echelon form. This is given by: 
+\begin{align*} 
+	\begin{bmatrix}
+		0 & 1 & -1& 0 \\
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 \\
+		0 & 0 & 0 & 0 
+	\end{bmatrix}
+\end{align*}
+We will call our variables $a_{11}, a_{12}, a_{21}, a_{22}$. From the reduced matrix, we know that $a_{11}$ and $a_{22}$ are free. We additionally obtain: 
+\begin{align*}
+	& \Rightarrow a_{12} - a_{21} = 0 \\
+	& \Rightarrow a_{21} = a_{12} 
+\end{align*}
+Since we have $a_{11}, a_{21},$ and $a_{22}$ as free parameters, we have a three-dimensional nulls-space. Symbolically, this means: 
+\begin{align*}
+	nullspace  & = span\begin{Bmatrix}
+		\begin{pmatrix}
+			1 \\
+			0 \\
+			0 \\
+			0 
+		\end{pmatrix}, 
+		\begin{pmatrix}
+			0 \\
+			1 \\
+			1 \\
+			0 \\
+		\end{pmatrix}, 
+		\begin{pmatrix}
+			0 \\
+			0 \\
+			0 \\
+			1 \\
+		\end{pmatrix} 
+	\end{Bmatrix} \\
+	& = \begin{Bmatrix}
+		\begin{pmatrix}
+			a_{11} \\
+			a_{12} \\
+			a_{12} \\
+			a_{22} 
+		\end{pmatrix} \bigg|\ a_{11}, a_{12}, a_{22} \in \mathbb{R} 
+	\end{Bmatrix} \\
+	& = \begin{Bmatrix}
+		\begin{pmatrix}
+			a_{11} & a_{12} \\
+			a_{12} & a_{22} 
+		\end{pmatrix} \bigg|\ a_{11}, a_{12}, a_{22} \in \mathbb{R} 
+	\end{Bmatrix}
+\end{align*}
+We can obtain the image since it is the column space: 
+\begin{align*}
+	Im(L) = span\begin{Bmatrix}
+		\begin{pmatrix}
+			0 \\
+			-1 \\
+			1 \\
+			0 
+		\end{pmatrix}
+	\end{Bmatrix}
+\end{align*}
+Dim(Im) = 1. We can interpret the result as a matrix: the set of all skew  symmetric matrices: 
+\begin{align*}
+	im(L) = \begin{Bmatrix}
+		\begin{pmatrix}
+			0 & a_{12} \\
+			-a_{12} & 0 
+		\end{pmatrix} \bigg|\ a_{12} \in \mathbb{R} 
+	\end{Bmatrix}
+\end{align*}
+\end{exmp}
+
+
+\end{document} 

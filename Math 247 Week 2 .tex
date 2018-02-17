@@ -1,0 +1,371 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\newcommand{\forceindent}{\leavevmode{\parindent=3em\indent}}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[margin=2cm]{geometry}
+\newtheorem{theorem}{Theorem}
+\usepackage{layout}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{color,soul}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{color}
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array, booktabs}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{color}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{mathrsfs}
+\newsavebox\foobox
+\newlength{\foodim}
+\newcommand{\slantbox}[2][0]{\mbox{%
+        \sbox{\foobox}{#2}%
+        \foodim=#1\wd\foobox
+        \hskip \wd\foobox
+        \hskip -0.5\foodim
+        \pdfsave
+        \pdfsetmatrix{1 0 #1 1}%
+        \llap{\usebox{\foobox}}%
+        \pdfrestore
+        \hskip 0.5\foodim
+}}
+\def\Laplace{\slantbox[-.45]{$\mathscr{L}$}}
+\setlength{\arrayrulewidth}{0.2mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.0}
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}[section]
+
+%TO USE CODE
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$ $},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+
+
+
+\title{\textbf{Math 247: Linear Algebra with Applications} \vspace{-2ex}}
+\author{\textbf{Course Notes - Week 2} \vspace{-2ex}}
+\date{}
+
+
+\newenvironment{enumerate_tight}{
+	\begin{enumerate}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{enumerate}}
+\newenvironment{itemize_tight}{
+	\begin{itemize}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{itemize}}
+
+\begin{document}
+
+\maketitle
+%\tableofcontents 
+
+\pagestyle{fancy}
+\lhead{Math 247: Applied Linear Algebra}
+\rhead{}
+\rhead{Revision Notes}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+{\renewcommand{\arraystretch}{1.2}% for the vertical padding
+\textbf{Main topics:} subspaces, intersections, unions, linear combinations, span, linear independence, linear dependence, finite-dimensional, Steinitz exchange lemma.  
+\section{Subspaces II}
+
+\begin{theorem}
+	If we have a vector space V over K, then U (a subset  $U \subseteq V$ of V), is called a \textbf{subspace} iff:
+	\begin{enumerate_tight}
+		\item $U$ contains the zero vector. 
+		\item $U$ is closed under the operations of a vector space $(+, \cdot)$. 
+	\end{enumerate_tight}
+\end{theorem}
+\begin{proof} Need to prove in both directions \newline \newline 
+	$[ \Rightarrow ]$ was last class. \newline
+	$[ \Leftarrow ]$ we need to prove why $U$ is a vector space in its own right. Most of the axioms hold for self-evident reasons. Since $U$ is a subset of $V$, it inherits many properties from $V$. We will check the axioms: 
+	\begin{itemize_tight}
+		\item \underline{Addition}: \textbf{associativity} and \textbf{commutativity} are inherited from V since V is a vector space. Additionally, the \textbf{neutral element} is contained in $U$ by condition. Some more tricky aspects: 
+		\begin{itemize_tight}
+			\item There exists an \textbf{additive inverse}: if we let $u$ be an arbitrary vector. Since $U$ is closed under scalar multiplication by condition 2, we have $$ (-1)u = -u \in U$$ 
+			\item This proves that all the axioms of addition hold. 
+		\end{itemize_tight} 
+	\item \underline{Scalar multiplication}: all axioms self-evidently hold since they hold $\forall v \in V$. 
+	\end{itemize_tight}
+	
+	Hence, $U$ is a vector space with respect to $+$ and $\cdot$, i.e., $U \leq V$. 
+\end{proof}
+
+\textbf{Some examples of sub-spaces}
+
+\begin{exmp}
+	All subspaces of $\mathbb{R}^2$: (1) $\{ 0 \}$, (2) all lines through the origin, and (3) $\mathbb{R}^2$. 
+\end{exmp}
+\begin{exmp}
+	Let $V:= mat(n \times n, k)$. Define $U$ to be the set of all upper-triangular matrices, i.e., $U := \{ A \in Mat(n \times n, k)\ |\ a_{ij} = 0\ \forall i > j,\ 0 \leq i,j, \leq n  \}$ with coefficients in K. This is an important example. It is clearly a subset and a subspace. 
+\end{exmp}
+
+\begin{exmp}
+	Here is a chain of subspaces: $C_{00} \leq C_{0} \leq C \leq S$. In words: the set of all convergent sequences constantly equal to zero is a subspace of the set of all convergent sequences that converge to zero which is a subspace of all convergent sequences which is a subspace of all sequences. 
+\end{exmp}
+
+\begin{exmp}
+	Let $P_n (k)$ be the set of all polynomials with degree at most $n$. Let $P(k)$ be the set of all polynomials following standard addition of polynomials. Then: 
+	$$
+		P_0(k) \leq P_1(k) \leq P_2(k) \leq ... \leq P_n(k) \leq ... \leq P
+	$$
+	All polynomials are \textbf{infinite-dimensional vector spaces} in their own right. Additionally, the \textbf{dimension} of $P_n$ is $n+1$. 
+\end{exmp}
+
+\section{Intersections and unions of subspaces}
+\begin{theorem} \textbf{Intersections of subspaces} \newline 
+	(a) Let $u,w$ be subspaces of $V$, which is a vector space over $K$. Then: $U \cap W \leq V$. \\
+	(b) Let $u_1, ..., u_n \leq V$. Then: $u_1 \cap ... \cap u_n$, which is equivalent to $\bigcap_{i=1}^n u_i$ is a subspace of V. \\
+	(c) Let I be an arbitrary index set, and $u_i \leq V\ \forall i \in I$. Then: 
+	$$
+		\bigcap_{i \in I} u_i \leq V
+	$$
+\end{theorem}
+\begin{proof} Proving each part: 
+	\begin{enumerate_tight}
+		\item Checking the axioms: 
+		\begin{enumerate_tight}
+			\item \textbf{Contains zero vector}: $0 \in u$ and $0 \in w$ iff $0 \in W \cap W$. 
+			\item \textbf{Closure under addition}: Let $v_1, v_2 \in U \cap W$. Then, especially, we have that $v_1$ is in U and $v_2$ is in U, so $v_1 + v_2 \in U$ since U is closed under addition. Similarly, $v_1 + v_2 \in W$. Since the sum is in both subspaces, then it is also in the intersection. Hence, it is closed under addition. 
+			\item \textbf{Closure under scalar multiplication}: 
+			\begin{align*}
+				& u_1 \in U \Rightarrow ku_1 \in U\ \forall k \in K \mbox{ (by assumption) } \\
+				& u_1 \in W \Rightarrow ku_1 \in W\ \forall k \in K \mbox{ (by assumption) }\\
+				& \Rightarrow kv_1 \in W \cap W \Rightarrow \mbox{ the intersection is closed under multiplication.} 
+			\end{align*}
+		\end{enumerate_tight} 
+		\begin{align*}  & \Rightarrow W \cap W \leq V \end{align*} 
+	\item The proof is basically the same as (a). 
+	\end{enumerate_tight}	
+\end{proof} 
+\begin{rmk}
+	In general, intersections of subspaces are not a problem. Unions, however, are more difficult. \textbf{Generally speaking, unions of subspaces are not subspaces themselves}. A union of two subspaces will always contain 0 and be closed under scalar multiplication; the problem arises with closure under addition. 
+\end{rmk}
+\begin{theorem}
+	\textbf{Unions of subspaces} \\
+	$U \cup W \leq V$ $\iff$ $U \subseteq W$ or $W \subseteq U$. These are trivial cases; in other cases, the union is not a subspace. 
+\end{theorem}
+
+\section{Sums of subspaces}
+\begin{defn}
+	If we let V be a vector space over K and $u, w \leq V$. Then: 
+	\begin{align}
+		u + w := \{ u + w\ |\ u \in U, w \in W \} 
+	\end{align}
+	is the \textbf{sum} of u and w. It is defined, in words, as follows: \textbf{all the possible sums with one vector rom U and one vectors from W}. Why this is not useless: 
+	\begin{enumerate_tight}
+		\item It is also a subspace of V
+		\item It is the smallest subspace of V that contains the union of U and W. 
+	\end{enumerate_tight}
+\end{defn}
+\begin{theorem}
+	Let V be a vector space over K and $u, w \leq V$. Then: 
+	\begin{enumerate_tight}
+		\item The sum is a subspace of V: $u +w \leq V$. 
+		\item The sum $u +w$ is the \textbf{smallest} subspace of V that contains BOTH U and W and hence their \textbf{union}.
+	\end{enumerate_tight}
+\end{theorem}
+\textbf{Aside:} we defined the \textbf{smallest subspace} in this context as such: if $\widetilde{V}$ is any subspace of V with $V \cup W \subseteq \widetilde{V}$, then the sum $u +  w \subseteq \widetilde{V}$. 
+In a similar way, we can define $u_1 + ... + u_n$ where $u_1, ..., u_n$ are all subspaces of V as such: 
+\begin{align*}
+	\{ u_1 + ... + u_n\ |\ u_k \in U_k,\ \forall 1 \leq k \leq n \} 
+\end{align*}
+If this holds, then $u_1 + ... + u_n \leq V$. 
+
+\section{Linear Combinations and Span}
+\begin{defn}
+	Let V be a vector space over k, $v_1,.., v_n \in V$, and $k_1,...,k_n \in K$. Then, an expression of the form 
+	\begin{align*}
+		k_1 v_1 + ... + k_n v_n
+	\end{align*}
+	is called a \textbf{linear combination} of $v_1, ..., v_n$. 
+\end{defn}
+\begin{rmk}
+	It is possible to extend the idea of a linear combination to infinitely many vectors: 
+	\begin{align*}
+		k_1v_1 + k_2v_2 + ...
+	\end{align*}
+\end{rmk}
+this, however, is \textbf{completely meaningless.} We do not know what it means to add infinitely many vectors. There is no notion of convergence here, since there is no notion of distance in a vector space like there is, for say, sequences. 
+\newline 
+\newline
+What we can do is define $k_1 v_1 + k_2 v_2 + ... $ where all but \textbf{finitely many} of the $k_i = 0$. 
+
+\begin{defn}
+	If we let V be a vector space over K and $v_1, ..., v_n \in V$. Then, \textbf{span} is defined as: 
+	\begin{align}
+		span\{ v_1, ..., v_n \} = \{k_1v_1 + ... + k_n v_n\ |\ k_i \in K\, 1 \leq i \leq n \} 
+	\end{align}
+	in other words, it is the set of all linear combinations. 
+\end{defn}
+\begin{rmk}
+	Note that: 
+	\begin{align*}
+		span\{ v_1, ..., v_n \} & = span \{ v_1 \} + ... + span \{v_n \} \\ 
+		& \Rightarrow \{ k_1 v_1 + k_n v_n\ |\ k_i \in K \}  
+	\end{align*}
+	Since sums of subspaces are also subspaces, then the entire thing is also a subspace. From this, we also get something for free: the $span \{ v_1, ..., v_n \}$ is the smallest subspace of V containing all the vectors. 
+\end{rmk}
+\begin{exmp}
+	Our vector space is $V = \mathbb{R}^n$. Then, the following are the standard basis vectors of $\mathbb{R}^n$: 
+	\begin{align*}
+	\mbox{Standard basis vectors of $\mathbb{R}^n$} =
+	\begin{cases} 
+		e_1 = <1,0,...> \\
+		e_2 = <0,1,...> \\
+		\vdots \\ 
+		e_n = <0,...,1> \\ 
+		\end{cases} 
+	\end{align*}
+It's clear that $\mathbb{R}^n = span\{ e_1, ..., e_n \}$
+\end{exmp} 
+\begin{exmp}
+	A more abstract vector space: consider the vector space $P_n(k)$, defined as 
+	\begin{align*}
+		P_n(k) = \{1, x, x^2, x^3,...,x^n \} 
+	\end{align*}
+	You can think of these as the "building blocks" of the vector space. Consider the linear combinations of this. You'd obtain: 
+	\begin{align*}
+		span\{1,x,x^2, ...,x^n \} = \{ k_01 + k_1x + ... k_nx^n\ |\ k_i \in K, 0 \leq i \leq n \} = P_n(k) 
+	\end{align*}
+\end{exmp} 
+
+\begin{exmp}
+	Consider the vector space S of all sequences with coefficients in $\mathbb{R}$. We'd define the following: 
+	\begin{align*}
+		S_1 & = (1,0,0,...) \\
+		S_2 & = (0,1,0,...) \\
+		S_3 & = (0,0,1,...) \\
+		& \vdots \\
+	\end{align*}
+\end{exmp}
+These are analogous to the standard basis vectors of $\mathbb{R}^n$. \textbf{Question}: What is the span? \textbf{Answer}: it is NOT a spanning set, since linear combinations only involve finitely many terms. 
+\begin{rmk}
+	$\{ s_1, s_2, ... \}$ does NOT span S, since there are \textbf{finitely} many rows. So, this will be constantly equal to zero; you'd obtain $C_{00}$. This is a very small subspace. In other words: \textbf{every linear combination of S results in a sequence that is eventually constantly equal to 0}. In fact, $span \{ s_1, s_2, ... \}$ is $C_{00}$. 
+\end{rmk}
+
+\section{Linear Independence and Dependence}
+\begin{defn}
+	Let V be a vector space over K, $v_1,..., v_n \in V$. We say that $v_1, ...,v_n$ are \textbf{linearly independent} if 
+	\begin{align}
+		k_1 v_1 + ... + k_n v_n = 0 \Rightarrow k_1 = k_2 = ... = k_n = 0
+	\end{align}
+	This combination is known as the \textbf{trivial linear combination}.  $v_1, ..., v_n$ are called \textbf{linearly dependent} if they are not linearly independent. 
+\end{defn}
+
+\begin{theorem}
+	Let V be a vector space over K. Then: 
+	\begin{enumerate_tight}
+		\item Any (finite) subset of V that contains the zero vector is linearly dependent. 
+		\item If $v_1,...,v_n$ are linearly dependent (say, $v_j$, then at least one of them can be written as a \textbf{linear combination} of the remaining vectors. In that case:
+		\begin{align*}
+			& \mbox{Consider $span \{ v_1, ..., v_n \}$. Then, we can kick $v_j$ out and obtain the same span:} \\
+				& span \{ v_1, ..., v_n \} = span \{ v_1, ..., \hat{v_j}, ..., v_n \}  
+		\end{align*}
+	\end{enumerate_tight}
+\end{theorem}
+
+\begin{theorem}
+	Let $v_1,...,v_n \in V$, $v_1,...,v_n$ be linearly independent. Let $v_{n+1} \notin span \{v_1,...,v_n \}$. Then, $v_1,...,v_n, v_{n+1}$ are \textbf{linearly independent}. 
+\end{theorem}
+This is a useful theorem; we will use this in the future to construct bases. 
+
+\begin{defn}
+	Let V be a vector space over K. V is called \textbf{finite-dimensional} if V has a finite spanning set; i.e., there are finitely many $v_1,...,v_n \in V$ s.t. they all span V. 
+\end{defn}
+\begin{rmk}
+	Let V be a vector space over K, $W \leq V$. Assume that V is finite dimensional. It is tempting to assume that W is finite dimensional. While it is true, we cannot currently prove it. We will currently conclude that W is finite dimensional, but we will prove it later.  
+\end{rmk}
+
+\begin{defn}
+	V is called \textbf{infinite-dimensional} if it is not finite dimensional. Methods of showing that a vector space is infinite-dimensional are very different from finite-dimensional. To prove something is finite-dimensional, it is sufficient to write one example of a finite spanning set. However, to prove something is infinite-dimensional, you need to show that NO finite spanning set can possibly exist, which is much trickier. 
+\end{defn}
+
+\begin{exmp}
+	$\mathbb{R}^n$ is finite dimensional. This is trivial: just write out the following finite spanning set:
+	$$ \mathbb{R}^n = span \{ e_1, ..., e_n \} $$
+\end{exmp}
+
+\begin{exmp}
+	Prove that $C_{00}$ is infinite-dimensional. We do a proof by contradiction. 
+	\newline 
+	\newline
+	Assume that $C_{00}$ is finite-dimensional. We will let $S_1,...,S_n$ be sequences in $C_{00}$, which, recall, is the vector space of all sequences that are eventually constantly equal to zero, such that $C_{00} = span \{ s_1,...,s_n \}$. 
+	\newline 
+	\textbf{Written proof}: 
+	\newline
+	Here, only finitely many terms do not equal zero. This means that every sequence has finitely many non-zero terms, so we can obtain an index where all sequences are zero after the index. 
+\end{exmp}
+
+\begin{theorem}
+	\textbf{Very important: Steinitz Exchange Lemma}
+	\newline
+	Let V be a finite-dimensional vector space over K. The idea is to compare the size of linear independent sets to the size of spanning sets. We let $u_1,...,u_m \in V$ be linearly independent. Let $v_1,...,v_n$ be spanning. \textbf{then, $\mathbf{m \leq n}$} and there exists finitely many indices $K_1,..., k_{n-m}$ such that: 
+	\begin{align*}
+		u_1,...,u_m, v_k,...,v_{k_{n-1}} \mbox{ is \textbf{spanning}.} 
+	\end{align*}
+	Basically, we can \textbf{exchange m of the vectors $v_1,...,v_n$ by $u_1,...,u_m$ without changing the span. }
+\end{theorem}
+\end{document} 

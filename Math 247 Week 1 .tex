@@ -1,0 +1,335 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\newcommand{\forceindent}{\leavevmode{\parindent=3em\indent}}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[margin=2cm]{geometry}
+\newtheorem{theorem}{Theorem}
+\usepackage{layout}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{color,soul}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{color}
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array, booktabs}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{color}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{mathrsfs}
+\newsavebox\foobox
+\newlength{\foodim}
+\newcommand{\slantbox}[2][0]{\mbox{%
+        \sbox{\foobox}{#2}%
+        \foodim=#1\wd\foobox
+        \hskip \wd\foobox
+        \hskip -0.5\foodim
+        \pdfsave
+        \pdfsetmatrix{1 0 #1 1}%
+        \llap{\usebox{\foobox}}%
+        \pdfrestore
+        \hskip 0.5\foodim
+}}
+\def\Laplace{\slantbox[-.45]{$\mathscr{L}$}}
+\setlength{\arrayrulewidth}{0.2mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.0}
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}[section]
+
+%TO USE CODE
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$ $},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+
+
+
+\title{\textbf{Math 247: Linear Algebra with Applications} \vspace{-2ex}}
+\author{\textbf{Course Notes - Week 1} \vspace{-2ex}}
+\date{}
+
+
+\newenvironment{enumerate_tight}{
+	\begin{enumerate}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{enumerate}}
+\newenvironment{itemize_tight}{
+	\begin{itemize}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{itemize}}
+
+\begin{document}
+
+\maketitle
+%\tableofcontents 
+
+\pagestyle{fancy}
+\lhead{Math 247: Applied Linear Algebra}
+\rhead{}
+\rhead{Revision Notes}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+{\renewcommand{\arraystretch}{1.2}% for the vertical padding
+
+\section{Introduction}
+\textbf{Motivation}: the purpose of this class is to move from $\mathbb{R}^n$ to a more abstract vector space and generalize what we've learned in Math 133. In maths, many objects behave similarly. In other words, we tend to see several instances of the same phenomenon. So, by generalizing, we:
+\begin{itemize_tight}
+	\item Increase efficiency. 
+	\item Clarify the essence of what's behind the object. 
+\end{itemize_tight}
+Examples of objects in maths include groups, rings, fields, and vector spaces. 
+
+\section{Quick Algebra}
+
+\begin{defn}
+	A \textbf{group} is a set that comes with standard operations. All objects in the groups obey in the same rules. Some examples of groups include numbers and matrices. 
+\end{defn}
+\begin{defn}
+	A \textbf{binary operation} means that you take two objects in the set, perform the operation, and obtain one object in return. This object must also be a member of the set.
+\end{defn}
+\begin{itemize_tight}
+	\item Binary operations are denoted by taking the \textbf{cartesian product}: $G \times G \rightarrow G$. It can also be denoted as $(a,b) \mapsto a +b$. 
+	\item Any structure with the following properties is a group: 
+	\begin{enumerate_tight}
+		\item \textbf{Law of Associativity}: $$ a + (b+c) = (a+b) + c\ \forall a,b,c \in G$$ 
+		\item \textbf{Existence of a mutual element}: if you add zero to anything, the input is unchanged. $$ 0 + a = a + 0 = a\ \forall a \in G$$ 
+		\item \textbf{Existence of an inverse}: $\forall a \in G$, there exists an \textbf{additive inverse}, denoted $-a \in G$ such that $$ a + (-a) = 0 \mbox{ and } (-a) + a = 0 $$ 
+	\end{enumerate_tight}
+\end{itemize_tight}
+A group always consists of two parts: a set and the operation(s) defined for the set. For example: $(G + )$ is referring to the set $G$ with the operation $+$ defined for it. 
+One additional element that's nice to have is \textbf{commutativity}. 
+\begin{defn}
+	A group $(G+)$ is called \textbf{abelian} if $\forall a,b \in G$, we also have the law of commutativity: 
+	$$ a + b = b + a$$ 	
+\end{defn}
+
+\begin{exmp}
+	\textbf{Examples of abelian groups:}
+	\begin{itemize_tight}
+		\item $\mathbb{R}$ with standard addition. 
+		\item $\mathbb{Z}$ with standard addition. 
+		\item $\mathbb{C}$ with standard addition. 
+		\item $\mathbb{R}^n$ and $\mathbb{C}^n$ with component-wise addition. 
+		\item Matrix addition together with component=wise addition. This will be denoted by $Mat(n \times m, \mathbb{R})$ or $Mat(m \times n, \mathbb{C})$. These are $m \times n$ matrices with coefficients in $\mathbb{R}$ or $\mathbb{C}$, respectively. 
+		\item The set $F(\mathbb{R})$ of all real-valued functions with domain $\mathbb{R}$ with addition defined as: $$ (f + g)(x) = f(x) + g(x)$$ addition is component-wise with uncountably many elements. 
+		\begin{enumerate_tight}
+			\item The \textbf{neutral element} is the zero function: $0(x):= 0$
+			\item The \textbf{additive inverse} is: $(-f)(x) = -f(x)\ \forall x \in \mathbb{R}$. 
+		\end{enumerate_tight}
+		\item \textbf{Counter-example}: $\mathbb{N} = \{1,2,3,4,...\} $ is NOT an example simply because there is no element with an additive inverse in $\mathbb{N} $ for every value. So, it is not a group. 
+	\end{itemize_tight}
+\end{exmp}
+
+\begin{exmp}
+	\textbf{Examples of non-Abelian groups}: 
+	\begin{itemize_tight}
+		\item $GL(n, \mathbb{R})$, i.e., the \textbf{general linear group}, which is the set of all invertible $n \times n$ matrices with real coefficients together (this indicates the operation) with matrix multiplication. 
+		\begin{enumerate_tight}
+			\item \underline{Neutral element}:
+			
+			\begin{align}
+				I_n = \begin{bmatrix}
+					1 & 0 & \cdots & 0\\
+					0 & 1 & \cdots & 0 \\ 
+					\vdots & \ddots & \ddots & 0 \\ 
+					0 & \hdots & \hdots & 1 
+				\end{bmatrix}
+			\end{align}
+		\textbf{Why: }$I_nA = AI_n = A\ \forall A \in GL(n, \mathbb{R})$
+		
+		\item \textbf{Inverse}: $A^{-1}$ since $AA^{-1} =$ the neutral element $I_n$. Hence, $GL(n, \mathbb{R})$ is a group under multiplication.  
+		\end{enumerate_tight}
+			
+	 
+	\end{itemize_tight}
+\end{exmp}
+
+\begin{theorem}[Cancellation Law] 
+Let ($G, +$) be a group with $a, b, c \in G$ such that: 
+\begin{enumerate_tight}
+	\item $a + b = a + c \Rightarrow b = c$
+	\item $b + a = c + a \Rightarrow b = c$
+\end{enumerate_tight}
+This is a useful law to use when proving consequences of the axioms of vector spaces. 
+\end{theorem}
+
+\section{Abstract Vector Space}
+\textbf{Motivation}: to generalize $\mathbb{R}^n$. 
+\begin{defn}
+	Let V be a set and let K, an arbitrary field, be either $\mathbb{R}$ or $\mathbb{C}$, together with two operations: 
+	\begin{align}
+		& + : V \times V \mapsto V \\
+		& \cdot : K \times V \mapsto V \mbox{ (scalar multiplication)} \\ 	
+	\end{align}
+	The group, denoted $(V, +, \cdot)$ is called a \textbf{vector space over K} (K is whatever our scalar is allowed to be; the field), if the following \textbf{axioms} hold: 
+	\begin{enumerate_tight}
+		\item \textbf{(A1): Abelian group}: $(V, +)$ is an abelian group. The \textbf{neutral element} here is the \textbf{zero vector}. 
+		\item \textbf{(M1): Associativity}: this is slightly different from regular associativity, since the objects are different.
+		\begin{align*}  
+		 (kl)\vec{v} = k(l\vec{v})\\ \forall k,l \in L, \vec{v} \in V
+		 \end{align*} 
+		\item \textbf{(M2): Distributivity of scalars over vectors}: note that we go from addition of scalars on the LHS to addition of vectors on the RHS.
+		\begin{align*}  
+		(k + l)\vec{v} = k \vec{v} + l \vec{v}\\ \forall k, l \in K,\ \vec{v} \in V 
+		\end{align*} 
+		\item \textbf{(M3): Distributivity of vectors over scalars}: 
+		\begin{align*}
+			k( \vec{u} + \vec{v}) = k \vec{u} + k \vec{v} \\
+			\forall k \in K, \vec{v}, \vec{u} \in V
+		\end{align*}
+		\item \textbf{(M4) Contains the neutral element of scalar multiplication} 
+		\begin{align*}
+			1 \cdot \vec{v} = \vec{v} 
+		\end{align*}
+		Remark: this is not provable from the other axioms; it's independent. 
+	\end{enumerate_tight}
+\end{defn}
+
+\section{Examples of abstract vector spaces}
+\begin{exmp}
+	$Mat(n \times m, k),$ $+$ standard addition of matrices and $\cdot$ standard multiplication by scalars. 
+	\newline
+	\newline
+	We will interpret matrices as vectors since they are part of the vector space. We can prove that a set of objects is a vector space by checking all the axioms: 
+	\begin{enumerate_tight}
+		\item $(mat(n \times m, k), +)$ is abelian is obvious. 
+		\item Matrix multiplication by scalars is associative. This is obvious, since it is carried out using ordinary, component-wise multiplication. 
+		\item Due to component-wise multiplication: it is distributive. 
+		\item Due to component-wise multiplication: $1A = A$ if $A \in Mat(n \times m, k)$. 
+	\end{enumerate_tight}
+\end{exmp}
+
+\begin{exmp}
+	If we let S to be the set of all real sequences, i.e., 
+	$$ \{ (a_1, a_2, a_3,...)\ |\ a_i \in \mathbb{R} \}$$
+	Then, this can be considered a vector space. Addition is carried out component-wise, same with multiplication. This is similar to $\mathbb{R}^n$, except there we stop at some $n$. Here, it's \underline{infinite-dimensional}. Here, checking the axioms is trivial since all operations are component-wise, so, the axioms follow immediately from this fact. 
+\end{exmp}
+
+\begin{exmp}
+	If we let C to be the set of all convergent real sequences, together with component-wise addition and scalar multiplication. Some things we need to keep an eye out for:
+	\begin{itemize_tight}
+		\item Addition must be a binary operation in that when we add two members in the set, we obtain another member of the set. 
+		\item A theorem from analysis says that the sum of two convergent sequences is convergent as well. Additionally, any scalar multiple of a convergent sequence is also convergent. So, C is closed under $+$ and $\cdot$. 
+	\end{itemize_tight}
+\end{exmp}
+
+\begin{exmp}
+	Let $C_0$ be the set of all real sequences converging to zero with component-wise operations. Checking the axioms: 
+	\begin{itemize_tight}
+		\item If you take two sequences that converge to zero and add them, the sum will converge to zero. So $C_0$ is closed under addition. 
+		\item If you multiply a sequence that converges with zero by a scalar, then that will also converge to zero. So $C_0$ is closed under scalar multiplication. 
+		\item This is a subspace of convergent sequences. 
+		\item This is an infinite-dimensional vector space that is countable. 
+	\end{itemize_tight}
+\end{exmp}
+
+\begin{exmp}
+	Let $C_{00}$ be th set of all real sequences that are eventually zero (i.e., all but finitely many terms are different from zero). 
+	\begin{itemize_tight}
+		\item This is closed under addition and multiplication. (Component-wise operations). 
+		\item Subset of $C_0$, so it is a subspace. 
+		\item This is infinite-dimensional, but it is countable. 
+	\end{itemize_tight}
+\end{exmp}
+
+\begin{exmp}
+	Let $I \subseteq \mathbb{R}$ be an interval. Consider $F(I)$: let it be the sett of all real-valued functions on I with $+$ and $\cdot$ defined by: 
+	\begin{align*}
+		(f+g)(x) = f(x) + g(x) \\
+		(kf)(x) = kf(x) 
+	\end{align*}
+	(this is similar to component-wise, except you have uncountably many components). 
+\end{exmp}
+
+\section{Consequences from the axioms}
+\begin{theorem}
+	Let $(V, +, \cdot)$ be a vector space over K. Then: 
+	\begin{enumerate_tight}
+		\item $k \cdot \vec{0} = \vec{0}$ $\forall k \in K$
+		\item $0 \cdot \vec{v} = \vec{0}$ $\forall \vec{v} \in V$ 
+		\item $k \cdot \vec{0} \iff k =0$ or $\vec{v} = 0$ 
+	\end{enumerate_tight}
+\end{theorem}
+
+\begin{theorem}
+	Let $(v, +, \cdot)$ be a vector space over K. Then: 
+	\begin{enumerate_tight}
+		\item $n \cdot \vec{v} = \vec{v} + ... + \vec{v}$ (n times) $\forall n \in \mathbb{N}$ 
+		\item $0 \cdot \vec{v} = 0$ 
+		\item $(-1)\vec{v} = - \vec{v}$ (the additive inverse) $\forall \vec{v} \in V$  
+	\end{enumerate_tight}
+\end{theorem}
+
+\section{Subspaces}
+\begin{defn}
+	Let V be a vector space $(V, +, \cdot)$ over k. Let $W \subseteq V$ (it is a subspace if it is a vector space). W is called a \textbf{subspace} of V, symbolized as $W \leq V$, if $(W, +, \cdot)$ is a vector space over k. 
+\end{defn}
+
+\textbf{How can we determine if something is a subspace?}
+
+\begin{theorem}
+	Let $(V, +, \cdot)$ be a vector space over k, $W \subseteq V$, then, $W \leq V$ iff: 
+	\begin{enumerate_tight}
+		\item W is \textbf{closed under addition and scalar multiplication}. 
+		\item $0 \in W$ (so, it's \textbf{not an empty set}). 
+	\end{enumerate_tight}
+\end{theorem}
+\end{document} 

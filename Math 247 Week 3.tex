@@ -1,0 +1,385 @@
+\documentclass[a4paper, 12pt]{article}
+\usepackage{amsthm}
+\setlength{\parindent}{0pt}
+\newcommand{\forceindent}{\leavevmode{\parindent=3em\indent}}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{float}
+\newcommand{\eqname}[1]{\tag*{#1}}% Tag equation with name
+\usepackage{subfig}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{gensymb}
+\usepackage[margin=2cm]{geometry}
+\newtheorem{theorem}{Theorem}
+\usepackage{layout}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{color,soul}
+\usepackage{amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage{color}
+\usepackage[TS1,T1]{fontenc}
+\usepackage{array, booktabs}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{graphicx}
+\usepackage{color}
+\setlength{\parindent}{0pt}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{csquotes}
+\usepackage{mathrsfs}
+\newsavebox\foobox
+\newlength{\foodim}
+\newcommand{\slantbox}[2][0]{\mbox{%
+        \sbox{\foobox}{#2}%
+        \foodim=#1\wd\foobox
+        \hskip \wd\foobox
+        \hskip -0.5\foodim
+        \pdfsave
+        \pdfsetmatrix{1 0 #1 1}%
+        \llap{\usebox{\foobox}}%
+        \pdfrestore
+        \hskip 0.5\foodim
+}}
+\def\Laplace{\slantbox[-.45]{$\mathscr{L}$}}
+\setlength{\arrayrulewidth}{0.2mm}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.0}
+
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
+
+\theoremstyle{definition} 
+\newtheorem{defn}{Definition}[section]
+
+\theoremstyle{definition}
+\newtheorem{alg}{Algorithm}[section]
+
+\theoremstyle{definition}
+\newtheorem{rmk}{Remark}[section]
+
+%TO USE CODE
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+\usepackage{color}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+
+\usepackage{listings}
+\lstset{language=Java,
+	showspaces=false,
+	showtabs=false,
+	breaklines=true,
+	showstringspaces=false,
+	breakatwhitespace=true,
+	commentstyle=\color{pgreen},
+	keywordstyle=\color{pblue},
+	stringstyle=\color{pred},
+	basicstyle=\ttfamily,
+	moredelim=[il][\textcolor{pgrey}]{$ $},
+	moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+
+
+
+
+\title{\textbf{ Math 247: Applied Linear Algebra } \vspace{-2ex}}
+\author{\textbf{Week 3 Course Notes} \vspace{-2ex}}
+\date{}
+
+
+\newenvironment{enumerate_tight}{
+	\begin{enumerate}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{enumerate}}
+\newenvironment{itemize_tight}{
+	\begin{itemize}
+		\setlength{\itemsep}{0pt}
+		\setlength{\parskip}{0pt}
+	}{\end{itemize}}
+
+\begin{document}
+
+\maketitle
+\textbf{Main topics}: Steinitz exchange lemma, bases, casting out algorithm, dimension
+
+\pagestyle{fancy}
+\lhead{Math 247: Applied Linear Algebra}
+\rhead{}
+\rhead{Revision Notes}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\setlength{\tabcolsep}{0.5em} % for the horizontal padding
+{\renewcommand{\arraystretch}{1.2}% for the vertical padding
+
+\section{Theoretical applications of Steinitz Exchange}
+
+\begin{theorem}
+	Every subspace of a finite-dimensional vector space is finite-dimensional itself. 
+\end{theorem}
+\begin{proof}
+	We use Steinitz Exchange Lemma to prove this theorem. Let V be a finite dimensional vector space and $U \leq V$. V is finite dimensional $\Rightarrow$ V has a finite spanning set $v_1, ..., v_n$. None of these vectors need to be in U. We can \textbf{recursively} show that U has a finite spanning set, which would imply that it is finite-dimensional. 
+	\newline 
+	\newline
+	\textbf{Proof by contradiction:} $\Rightarrow$ $U \neq \{ 0 \}$. So, let $u_1 \neq 0$, $u_1 \in U \Rightarrow$ $u_1$ is linearly independent. By the hypothesis, it is not spanning, since it is a finite set $\Rightarrow$ we can find a vector $v_2 \in U$ with $u_2 \notin span \{ u_1 \}$. By the same argument as before, we can continue adding vectors since it is not a spanning set, by assumption. 
+	\newline 
+	\newline 
+	After $n+1$ iterations, we've obtained a \textbf{linearly independent set} $\{ u_1,..., u_{n+1} \} \subseteq U \subseteq V$. Here is the problem: \textbf{We have a linearly independent set consisting of n+1 elements and a spanning set with n elements (for V), which is not allowed by the Steinitz Exchange Lemma.} This is a contradiction, since V has a spanning set containing n elements. The assumption was wrong, which forces U to be finite-dimensional. 
+\end{proof}
+
+\begin{exmp}
+	The vector space S of all sequences with real coefficients is infinite-dimensional. Why? We already know an infinite-dimensional sub-space: $C_{00}$. 
+	\begin{itemize_tight}
+		\item If S were finite-dimensional, any subspace of S would also be finite-dimensional. 
+		\item Since $C_{00}$ is infinite-dimensional, S cannot be finite-dimensional, so, it must be infinite-dimensional. 
+		\item This is basically a contrapositive proof. 
+		\item From this, we also get the fact for free that $C_0$ is infinite-dimensional. 
+	\end{itemize_tight}
+\end{exmp}
+
+\section{Basis of a Vector Space}
+\begin{defn}
+	Let V be a vector space over K. A subset B of V is called a \textbf{basis} if: 
+	\begin{enumerate_tight}
+		\item B is \underline{linearly independent}. 
+		\item B is \underline{spanning}. 
+	\end{enumerate_tight}
+Note that these two factors tend to move in opposite directions. A more intuitive meaning of this: B is a subset that allows us to create anything that we want in V, but at the same time doesn't include anything extra. It is the optimal compromise. 
+\end{defn}
+
+\begin{exmp}
+	$V = P_n$, the vector space of all polynomials of degree less than or equal to n: 
+	$$ B = \{ 1, x, x^2,..., x^n \} $$
+	This is in fact called the \textbf{standard basis for} $P_n$. 
+\end{exmp}
+
+\begin{exmp}
+	V = mat($m \times n$, k). Define the following: 
+	\begin{align*}
+		M_{ij}\ |\ (m_{ij}) \mbox{ where $m_{kl}$ is } \begin{cases}
+			0 \mbox{ if } kl \neq ij \\
+			1 \mbox{ if } kl = ij \\
+		\end{cases}
+	\end{align*}
+	Then, $\{ M_{ij} \}_{1 \leq i \leq m;\ 1 \leq j \leq n}$ is a basis for V. 
+\end{exmp}
+
+\begin{theorem}
+	Every finite-dimensional vector space has a basis. 
+\end{theorem}
+
+\begin{proof}
+	We prove this with the \textbf{casting-out algorithm}. Let V be a finite-dimensional vector space. Essentially, we will use the definition of a finite-dimensional vector space to obtain ``for free" that we have a finite spanning set $\{ v_1, ..., v_n \}$. There are two possibilities here: 
+	\begin{enumerate_tight}
+		\item The set could be linearly independent. If this is the case, then by definition of a basis we are done. 
+		\item The set could be linearly dependent. Then, we know that at least one of the vectors could be written as a linear combination of the other vectors. So, we can then eliminate one vector and leave the span unchanged. We an recursively remove vectors until we obtain a finite, linearly independent set after a finite number of steps. As proven in the previous theorem, we would obtain: 
+		$$ span\{ v_1,..., v_n \} = span \{ v_1, ..., v_{n-1} \} $$
+		Once we obtain the linearly independent set, we could have a linearly independent spanning set, and hence obtain a basis. 
+	\end{enumerate_tight}
+\end{proof} 
+
+\textbf{Question}: What is a basis for \{ 0 \}? \newline
+\textbf{Solution}: The only possibility is the empty set $\{ \}$. 
+
+
+\subsection{Constructing bases with a bottom-up algorithm}
+Let V be a finite-dimensional vector space over k. Then, V will have a spanning set consisting of n elements. 
+\begin{enumerate_tight}
+	\item If V is the zero-space, then we are done.
+	\item Else, we can pick a non-zero vector, $v_1 \in V$ which is non-zero. Then, $\{ v_1 \}$ is linearly independent. From here, there are two possibilities: 
+	\begin{enumerate_tight}
+		\item It is a spanning set, so we are done. 
+		\item Else: there is a vector $v_2 \in V$ s.t. $v_2 \notin span\{ v_1 \}$. By the previous theorem, this is a linearly independent set. 
+		\item And so on...
+	\end{enumerate_tight}
+\end{enumerate_tight}
+Since V is finite-dimensional, it cannot: it will stop after at most n steps. So, we have the very important conclusion: 
+\begin{center} 
+\boxed{
+\textbf{Size of any linearly independent set} \leq  \textbf{size of any spanning set} 
+}
+
+
+\end{center}  
+ 
+
+
+By Steinitz, this algorithm must terminate after at most n steps. We could then end up with a linearly independent and spanning set, which is by definition a basis. 
+
+\begin{exmp}
+	$P_2$:= all polynomials of degree at most 2 with coefficients in k. We already know that the set $\{ 1, x, x^2 \}$ is a basis and therefore spanning. We can run the algorithm to construct a new basis: 
+	\begin{align*}
+		\{ 2, 3 + 5x, 7-5x + 11x^2 \} 
+	\end{align*}
+	If we apply Steinitz, we have a linearly independent set of 3 vectors. So, it must be spanning. (Because if we added a fourth vector and still had a linearly independent set, it would be a contradiction to Steinitz). 
+\end{exmp}
+
+\textbf{Fact}: every VS except the trivial VS has infinitely many choices of bases. 
+
+\begin{theorem}[Very important application of Steinitz] 
+	Let V be a \textbf{finite-dimensional} VS over k. Let $ \{ u_1,...,u_m \}$ and $ \{ v_1, ..., v_n \}$ be a basis for V. Then, \textbf{m=n}. In other words: \textbf{any two bases of a finite-dimensional vector space must contain the same number of elements}
+\end{theorem}
+\begin{proof}
+	``Very nice proof. This is a super arrogant and short proof.'' We pick two completely arbitrary bases: 
+	\begin{align*}
+		B_1 = \{ u_1, ..., u_m \} \\
+		B_2 = \{ v_1, ..., v_n \} 
+	\end{align*}
+
+	[ $\Rightarrow$ ] Especially, $B_1$ is linearly independent, and especially $B_2$ is spanning. So, by Steinitz, $m \leq n$. Now, we do the exact opposite: 
+	\newline 
+	[ $\Leftarrow$ ] Especially, $B_2$ is linearly independent and especially $B_1$ is spanning. Hence, $n \leq m$. Therefore, the only possibility is that $n = m$. 
+\end{proof}
+
+\begin{defn}
+	Let V be a finite-dimensional VS over k. Let $ \{v_1, ..., v_n \}$ be any basis for V. Then, $n$ is called the \textbf{dimension of V}. 
+	\begin{itemize}
+		\item \textbf{Dimension} is the number of elements in a basis for V. 
+	\end{itemize}
+	\begin{rmk}
+		Only by Theorem 3 is this definition well-defined. 
+	\end{rmk}
+\end{defn}
+
+\begin{exmp}
+	$\mathbb{R}^n$ as a VS over $\mathbb{R}$ has dim(n) since $\{ e_1,...,e_n \}$. 
+\end{exmp}
+\begin{exmp}
+	$P_n(k)$ a VS over k has dim(n+1) since $\{1,x,x^2,...,x^n \}$ is a basis with n+1 elements. 
+\end{exmp}
+\begin{exmp}
+	Mat($n \times m$) VS over k has dimension $m \cdot n$ since its basis  has $m \cdot n$ elements. 
+\end{exmp}
+
+\section{Theorems on Bases and Dimension}
+
+\begin{theorem}[Very important]
+	Let V be a finite-dimensional VS over K. Say $V = \{ B_1,...,B)n \}$ is a basis for V. Let $v \in V$. Then, there exists a \textbf{uniquely determined} $k_1,...,k_n \in K$ such that: 
+	\begin{align*}
+		v = k_1 v_1 + ... + k_n v_n
+	\end{align*}
+\end{theorem}
+
+\begin{proof}
+	V is spanning $\Rightarrow$ $v$ can be written as a \textbf{linear combination} of $v_1,...,v_n$. Assume that we have two such representations: Let
+	\begin{align*} 
+		& v = k_1 v_1 + ... + k_n v_n \mbox{ and } \\
+		& v = l_1 v_1 + ... + l_n v_n 
+	\end{align*}
+	Subtract the equations and use the axioms of a vector space to simplify the resulting expressions: 
+	\begin{align*}
+		& 0 = (k_1 v_1 + ... + k_n v_n ) - (l_1 v_1 + ... + l_n v_n ) \\
+		& 0 = (K_1 - l_1)v_1 + ... + (k_n - l_n) v_n 
+	\end{align*}
+	The heart of this proof is the \textbf{clever definition of linear independence}. We have that 0 is expressed as a linear combination of linearly independent vectors. Therefore, all coefficients MUST be zero. This forces all the coefficients to be equal, which means that $v$ \textbf{can be expressed in exactly one way as a linear combination}. 
+\end{proof}
+
+\begin{theorem}
+	Let V be a finite-dimensional VS over k. Let $U \leq V$. Then, $\mathbf{dim(U) \leq dim(V)}$. This implicitly uses the result from last class (that U is finite-dimensional, which is a subspace of a finite-dimensional space). 
+\end{theorem}
+\begin{proof}
+	The proof is ``very straightforward if you do it right.'' \newline \newline 
+	Let $\{ u_1, ..., u_m \}$ be a basis for U. Especially, this is \textbf{linearly independent}. \newline
+	Let $\{v_1,...,v_n \}$ be a basis for V. Especially, this is a spanning set. 
+	\newline 
+	\newline
+	Now, we apply Steinitz and the trick from last class. The first set is linearly independent and the second is spanning, so by Steinitz, we immediately have that $m \leq  n \Rightarrow dim(U) \leq dim(V)$. 
+\end{proof}
+The next theorem answers the question: when can we stop constructing bases? 
+\begin{theorem}
+	Let V be a finite-dimensional V over K of dim(V) = n. Once we obtain n linearly independent vectors, then we are done. In more mathematical language: Let $B = \{ v_1, ..., v_n \}$ be linearly independent. Then, B is a basis for V. 
+\end{theorem}
+\begin{proof}
+	We have for free that B is linearly independent. Now we need to show that it is a spanning set. \textbf{Proof by contradiction}: assume it is not. 
+	\begin{itemize_tight}
+		\item Apply the bottom-up algorithm. We would then obtain a linearly independent set with n+1 elements. 
+	\end{itemize_tight}
+\begin{align*}  
+		& \Rightarrow \exists v_{n+1} \in V\ |\ v_{n+1} \notin span \{v_1,...,v_n \} \\
+		& \Rightarrow \{ v_1, ..., v_n, v_{n+1} \} \mbox{ is linearly independent. }
+\end{align*} 
+\begin{itemize_tight}
+	\item \textbf{Contradiction:} since dim(V) = n, V has a spanning set of length n, so a linearly independent set of size n+1 is a contradiction to Steinitz. Thus, V must also be spanning $\Rightarrow$ it's a basis. 
+\end{itemize_tight}
+\end{proof}
+
+\begin{theorem}[Kind of converse of previous theorem] 
+	Let V be a finite-dimensional VS over K of dim(V) = n. Let $B = \{ v_1,...,v_n \}$ be spanning. Then: B is a basis for V. 
+\end{theorem}
+\begin{proof}
+	We get for free that B is spanning. So, we need to show that it is linearly independent. Again, we will prove this by contradiction
+	\begin{itemize_tight}
+		\item Apply the top-down algorithm. We can cast out at least one member by retaining spanning. We will obtain a spanning set that's too small for a VS of dimension n. 
+		\item Assume: not linearly independent, then: 
+	\end{itemize_tight}
+	\begin{align*}
+		& \exists j, 1 \leq j \leq n\ |\ v_j \mbox{ is a linear combination of } v_1,.., \hat{v}_j,..., v_n \\ 
+		& \Rightarrow span\{ v_1,...,v_n \} = V = span \{ v_1,..., \hat{v}_j,...,v_n \} 
+	\end{align*}
+	\begin{itemize_tight}
+		\item \textbf{Contradiction}: The new spanning set only has n-1 members. But, since dim(V) = n, V has a spanning set of length n. This is a contradiction to Steinitz. This, B is also linearly independent and thus a basis. 
+	\end{itemize_tight}
+	
+\end{proof} 
+
+\begin{exmp}
+	$V = P_2(k)$. We have that dim(V) = 3. Define the following basis: 
+	\begin{align*}
+		B = \{ 3, 5-9x, 7-3x+13x^2 \} 
+	\end{align*}
+	B is linearly independent for degree reasons. Thus, B is spanning. 
+\end{exmp}
+
+\begin{theorem}
+	Let V be a finite-dimensional VS over k, $U \leq K$. Let $B_u = \{ u_1, ...,u_m \}$ be a basis for U. Then, $B_u$ can be \textbf{extended} to a basis $B_v$. In mathematical language: 
+	\begin{align*}
+		& \exists u_{m+1},..., u_n \in V\ s.t. \\
+		& B_v := \{ u_1, ..., u_m, u_{m+1}, ..., u_n \} 
+	\end{align*}
+	is a basis for V. This is essentially the bottom-up approach, but not beginning with the empty set. 
+\end{theorem}
+The proof is essentially the same argument as the one used for the existence of a basis by the bottom-up algorithm, except we start with $B_u$ as the original step. 
+
+\begin{theorem}
+	Let V be a finite-dimensional VS over K, $U \leq V$ and $W \leq V$. (In other words, we are given two subspaces of V). There are various ways to combine these to form new subspaces. In particular: 
+\begin{center} 
+\boxed{ dim(U+W) = dim(U) + dim(W) - dim (U \cap W) }
+\end{center}  	
+\end{theorem}
+
+\begin{exmp}
+	Any two planes through the origin in $\mathbb{R}^3$ have a non-trivial intersection; i.e., they intersect in \textbf{at least} a line through the origin. Using the result from the previous theorem, we can give a formal proof of this. 
+	\newline 
+	\newline
+	Planes through the origin are exactly the two-dimensional sub-spaces of $\mathbb{R}^3$. Let U and W be two such planes. Then, we obtain from the dimension formula: 
+	\begin{align*}
+		 dim(U+W) & = dim (U) + dim(W) - dim(U \cap W) \\ 
+		 dim(U \cap W) & = dim(U) + dim(W) - dim(U+W) \\
+		& = 2 + 2 - dim(U + W) 
+	\end{align*}
+	The dimension of U + W in $\mathbb{R}^3$ is at most 3. So we then obtain the following inequality: 
+	\begin{align*}
+	& \Rightarrow 4 - dim(U+W) \geq 4-3 \\
+	& \Rightarrow 4 - dim(U+W) \geq 1 
+	\end{align*}
+	Hence, the intersection is of at least dimension 1, which implies that it is at least a line. So, we have a subspace of $\mathbb{R}^3$ of dim $\geq$ 1 and is thus at least a line. 
+\end{exmp}
+\end{document}
+
